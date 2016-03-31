@@ -9,11 +9,11 @@ PuppetLint.configuration.ignore_paths = ["spec/**/*.pp", "pkg/**/*.pp"]
 task :librarian_spec_prep do
   sh "librarian-puppet install --path=spec/fixtures/modules/"
   pwd = Dir.pwd.strip
-  unless File.directory?("#{pwd}/spec/fixtures/modules/letsencrypt")
+  unless File.directory?("#{pwd}/spec/fixtures/modules/letsencrypt_wrap")
     # workaround for windows as symlinks are not supported with 'ln -s' in git-bash
     if (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil
       begin
-        sh "cmd /c \"mklink /d #{pwd}\\spec\\fixtures\\modules\\letsencrypt #{pwd}\""
+        sh "cmd /c \"mklink /d #{pwd}\\spec\\fixtures\\modules\\letsencrypt_wrap #{pwd}\""
       rescue Exception => e
         puts '-----------------------------------------'
         puts 'Git Bash must be started as Administrator'
@@ -21,7 +21,7 @@ task :librarian_spec_prep do
         raise e
       end
     else
-      sh "ln -s #{pwd} #{pwd}/spec/fixtures/modules/letsencrypt"
+      sh "ln -s #{pwd} #{pwd}/spec/fixtures/modules/letsencrypt_wrap"
     end
   end
 end
@@ -34,7 +34,7 @@ end
 
 task :spec_clean_win do
   pwd = Dir.pwd.strip
-  sh "cmd /c \"rmdir /q #{pwd}\\spec\\fixtures\\modules\\letsencrypt\""
+  sh "cmd /c \"rmdir /q #{pwd}\\spec\\fixtures\\modules\\letsencrypt_wrap\""
 end
 
 task :spec_prep => :librarian_spec_prep

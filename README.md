@@ -1,13 +1,13 @@
-# letsencrypt
+# letsencrypt_wrap
 
 #### Table of Contents
 
 1. [Overview](#overview)
 2. [Module Description - What the module does and why it is useful](#module-description)
-3. [Setup - The basics of getting started with letsencrypt](#setup)
-    * [What letsencrypt affects](#what-letsencrypt-affects)
+3. [Setup - The basics of getting started with letsencrypt_wrap](#setup)
+    * [What letsencrypt_wrap affects](#what-letsencrypt_wrap-affects)
     * [Setup requirements](#setup-requirements)
-    * [Beginning with letsencrypt](#beginning-with-letsencrypt)
+    * [Beginning with letsencrypt_wrap](#beginning-with-letsencrypt_wrap)
 4. [Usage - Configuration options and additional functionality](#usage)
 5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
 5. [Limitations - OS compatibility, etc.](#limitations)
@@ -33,7 +33,7 @@ This allows to solve the challenge even if the vhost is just a proxy to another 
 
 ## Setup
 
-### What letsencrypt affects
+### What letsencrypt_wrap affects
 
 WARNING! This module is not ready yet!
 
@@ -48,12 +48,12 @@ TODO
 
 Requests to Port 80 (and 433) of the IPv4 address of the domains to encrypt need to reach your server.
 
-### Beginning with letsencrypt
+### Beginning with letsencrypt_wrap
 
 See the following example for encrypting a nginx vhost.
 This will successfully configure nginx, the vhost and the ssl certificat in one run, if added to a blank Server.
 
-Important: You should declare letsencrypt resources after the nginx resources.
+Important: You should declare letsencrypt_wrap resources after the nginx resources.
 The fetching of the configured domains is parse order dependent.
 
 
@@ -74,7 +74,7 @@ The fetching of the configured domains is parse order dependent.
         },
       },
     }
-    class { 'letsencrypt':
+    class { 'letsencrypt_wrap':
       email            => 'email@example.com',
       agree_tos        => true
       firstrun_webroot => '/usr/share/nginx/html'
@@ -86,7 +86,7 @@ The fetching of the configured domains is parse order dependent.
 To add ssl configuration to an existing installation, you need first to configure the nginx_locations
 for your default vhost and your existing vhost.
 
-    class { 'letsencrypt':
+    class { 'letsencrypt_wrap':
       email            => 'email@example.com',
       agree_tos        => true
       nginx_locations     => {
@@ -95,13 +95,13 @@ for your default vhost and your existing vhost.
       }
     }
 
-If this is applied successfully, you can then add the ssl configuration to your nginx vhost as above and declare your letsencrypt::nginx::vhost
+If this is applied successfully, you can then add the ssl configuration to your nginx vhost as above and declare your letsencrypt_wrap::nginx::vhost
 
 #### Hiera example
 
     classes:
       - nginx
-      - letsencrypt
+      - letsencrypt_wrap
 
     nginx::nginx_vhosts:
       'letsencrypt-test1.example.com':
@@ -114,10 +114,10 @@ If this is applied successfully, you can then add the ssl configuration to your 
           ssl_key:              '/etc/letsencrypt/live/letsencrypt-test1.example.com/privkey.pem'
           ssl_cert:             '/etc/letsencrypt/live/letsencrypt-test1.example.com/fullchain.pem'
 
-    letsencrypt::email: 'email@example.com'
-    letsencrypt::agree_tos: true
-    letsencrypt::firstrun_webroot: '/usr/share/nginx/html'
-    letsencrypt::nginx_vhosts:
+    letsencrypt_wrap::email: 'email@example.com'
+    letsencrypt_wrap::agree_tos: true
+    letsencrypt_wrap::firstrun_webroot: '/usr/share/nginx/html'
+    letsencrypt_wrap::nginx_vhosts:
       'letsencrypt-test1.example.com': {}
 
 
@@ -137,7 +137,7 @@ This section should include all of the under-the-hood workings of your module so
 people know what the module is touching on their system but don't need to mess
 with things. (We are working on automating this section!)
 
-### Class: letsencrypt
+### Class: letsencrypt_wrap
 
 Let's Encrypt base configuration and hiera interface.
 
@@ -169,7 +169,7 @@ Let's Encrypt base configuration and hiera interface.
 [*firstrun_standalone*]
   Use standalone mode on first run.
   Set this to true if the webserver does not start automatically when installed.
-  letsencrypt will use standalone mode to get the certificate
+  letsencrypt_wrap will use standalone mode to get the certificate
   before the webserver is started the first time.
 
 [*rsa_key_size*], [*work_dir*], [*logs_dir*],

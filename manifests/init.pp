@@ -1,5 +1,5 @@
 # Let's Encrypt
-# == Class: letsencrypt
+# == Class: letsencrypt_wrap
 #
 # Let's Encrypt base configuration and hiera interface.
 #
@@ -42,7 +42,7 @@
 #
 # === Examples
 #
-#  class { 'letsencrypt':
+#  class { 'letsencrypt_wrap':
 #    email            => 'email@example.com',
 #    agree_tos        => true
 #    firstrun_webroot => '/usr/share/nginx/html'
@@ -59,7 +59,7 @@
 #
 # Copyright 2015 Philipp Gassmann here, unless otherwise noted.
 #
-class letsencrypt(
+class letsencrypt_wrap (
   $email,
   $agree_tos           = false,
   $server              = 'https://acme-staging.api.letsencrypt.org/directory', # 'https://acme-v01.api.letsencrypt.org/directory', #
@@ -74,9 +74,9 @@ class letsencrypt(
   $exec_webroot        = {},
   $exec_standalone     = {},
 ) {
-  include letsencrypt::install
+  include letsencrypt_wrap::install
 
-  unless $agree_tos { fail('letsencrypt: Please read the Terms of Service at https://letsencrypt.org/documents/LE-SA-v1.0.1-July-27-2015.pdf. You must agree in order to register with the ACME server at https://acme-v01.api.letsencrypt.org/directory') }
+  unless $agree_tos { fail('letsencrypt_wrap: Please read the Terms of Service at https://letsencrypt.org/documents/LE-SA-v1.0.1-July-27-2015.pdf. You must agree in order to register with the ACME server at https://acme-v01.api.letsencrypt.org/directory') }
 
   file{ [
       '/etc/letsencrypt',
@@ -90,14 +90,14 @@ class letsencrypt(
   }
 
   file{'/etc/letsencrypt/cli.ini':
-    content => template('letsencrypt/cli.ini.erb'),
+    content => template('letsencrypt_wrap/cli.ini.erb'),
     owner   => root,
     group   => root,
     mode    => '0640',
-    require => Class['letsencrypt::install'];
+    require => Class['letsencrypt_wrap::install'];
   }
-  create_resources('letsencrypt::nginx::location',  $nginx_locations)
-  create_resources('letsencrypt::nginx::vhost',     $nginx_vhosts)
-  create_resources('letsencrypt::exec::webroot',    $exec_webroot)
-  create_resources('letsencrypt::exec::standalone', $exec_standalone)
+  create_resources('letsencrypt_wrap::nginx::location',  $nginx_locations)
+  create_resources('letsencrypt_wrap::nginx::vhost',     $nginx_vhosts)
+  create_resources('letsencrypt_wrap::exec::webroot',    $exec_webroot)
+  create_resources('letsencrypt_wrap::exec::standalone', $exec_standalone)
 }

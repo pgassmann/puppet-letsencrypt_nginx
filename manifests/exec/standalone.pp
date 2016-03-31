@@ -1,9 +1,9 @@
 # letsencrypt standalone
-define letsencrypt::exec::standalone (
+define letsencrypt_wrap::exec::standalone (
   $domains = [$name],
-  $server  = $letsencrypt::server,
+  $server  = $letsencrypt_wrap::server,
 ){
-  include letsencrypt
+  include letsencrypt_wrap
   validate_array($domains)
   validate_string($server)
 

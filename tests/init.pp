@@ -9,6 +9,6 @@
 # Learn more about module testing here:
 # http://docs.puppetlabs.com/guides/tests_smoke.html
 #
-class{letsencrypt:
+class{letsencrypt_wrap:
   email => 'admin@example.com',
 }

@@ -1,18 +1,18 @@
 # letsencrypt webroot
-define letsencrypt::exec::webroot (
+define letsencrypt_wrap::exec::webroot (
   $domains = [$name],
-  $webroot = $letsencrypt::webroot,
-  $server  = $letsencrypt::server,
+  $webroot = $letsencrypt_wrap::webroot,
+  $server  = $letsencrypt_wrap::server,
 ){
-  include letsencrypt
+  include letsencrypt_wrap
   validate_array($domains)
   validate_string($server)
   validate_string($webroot)
 
   $params_domain = join($domains, ' -d ')
 
-  if $letsencrypt::firstrun_standalone and $::letsencrypt_firstrun != 'SUCCESS' {
-    letsencrypt::exec::standalone{ $name:
+  if $letsencrypt_wrap::firstrun_standalone and $::letsencrypt_firstrun != 'SUCCESS' {
+    letsencrypt_wrap::exec::standalone{ $name:
       domains => $domains,
       server  => $server,
     }
@@ -23,11 +23,11 @@ define letsencrypt::exec::webroot (
       owner   => root,
       group   => root,
       mode    => '0644',
-      require => Letsencrypt::Exec::Standalone[$name];
+      require => Letsencrypt_wrap::Exec::Standalone[$name];
     }
   } else {
-    if $letsencrypt::firstrun_webroot and $::letsencrypt_firstrun != 'SUCCESS'{
-      $real_webroot = $letsencrypt::firstrun_webroot
+    if $letsencrypt_wrap::firstrun_webroot and $::letsencrypt_firstrun != 'SUCCESS'{
+      $real_webroot = $letsencrypt_wrap::firstrun_webroot
       # TODO FIXME: This fails if webroot is defined multiple times
       file{ ['/etc/facter', '/etc/facter/facts.d']: ensure => directory; }
       file{ '/etc/facter/facts.d/letsencrypt.txt':

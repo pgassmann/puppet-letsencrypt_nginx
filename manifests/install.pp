@@ -1,5 +1,5 @@
 # install letsencrypt client
-class letsencrypt::install(
+class letsencrypt_wrap::install(
   $source           = 'git',
   $git_source       = 'https://github.com/letsencrypt/letsencrypt.git',
   $git_revision     = 'master',
@@ -28,7 +28,7 @@ class letsencrypt::install(
       }
     }
     default: {
-      fail("letsencrypt::install::source '${source}' not yet supported")
+      fail("letsencrypt_wrap::install::source '${source}' not yet supported")
     }
   }
 }

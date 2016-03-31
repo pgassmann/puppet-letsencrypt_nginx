@@ -1,5 +1,5 @@
 # Let's Encrypt
-# == Define: letsencrypt::nginx::vhost
+# == Define: letsencrypt_wrap::nginx::vhost
 #
 # Automatically get ssl certificate for nginx vhost
 #
@@ -17,15 +17,15 @@
 #  E.g. Elements of server_name that are defined in the vhost,
 #  but are not public resolvable or not valid fqdns.
 #
-define letsencrypt::nginx::vhost(
+define letsencrypt_wrap::nginx::vhost(
   $vhost           = $name,
   $domains         = undef,
   $exclude_domains = [],
 ){
   validate_array($exclude_domains)
 
-  include letsencrypt
-  require letsencrypt::nginx
+  include letsencrypt_wrap
+  require letsencrypt_wrap::nginx
 
   if defined(Nginx::Resource::Vhost[$vhost]){
     if $domains {
@@ -40,14 +40,14 @@ define letsencrypt::nginx::vhost(
       validate_array($domains)
       $real_domains = $domains
     } else {
-      fail("Nginx::Resource::Vhost[${vhost}] is not yet defined and domains are not specified, make sure that letsencrypt::nginx::vhost is parsed after nginx::resource::vhost")
+      fail("Nginx::Resource::Vhost[${vhost}] is not yet defined and domains are not specified, make sure that letsencrypt_wrap::nginx::vhost is parsed after nginx::resource::vhost")
     }
   }
 
   # if vhost is set as default_vhost, then the location is already added.
-  ensure_resource('letsencrypt::nginx::location', $vhost )
+  ensure_resource('letsencrypt_wrap::nginx::location', $vhost )
 
-  letsencrypt::exec::webroot{ $name:
+  letsencrypt_wrap::exec::webroot{ $name:
     domains => $real_domains,
     before  => Service['nginx'];
   }

@@ -1,6 +1,6 @@
 require File.expand_path(File.join(File.dirname(__FILE__),'../spec_helper'))
 
-describe 'letsencrypt::exec::webroot', :type => 'define' do
+describe 'letsencrypt_wrap::exec::webroot', :type => 'define' do
   let(:facts) do
     {
       :concat_basedir            => '/var/lib/puppet/concat',
@@ -10,7 +10,7 @@ describe 'letsencrypt::exec::webroot', :type => 'define' do
   let(:pre_condition) do
     "
       Exec{ path => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin' }
-      class{ 'letsencrypt':
+      class{ 'letsencrypt_wrap':
         email     => 'admin@example.com',
         agree_tos => true,
         server    => 'https://acme-v01.api.letsencrypt.org/directory',
@@ -45,7 +45,7 @@ describe 'letsencrypt::exec::webroot', :type => 'define' do
     let(:pre_condition) do
       "
         Exec{ path => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin' }
-        class{ 'letsencrypt':
+        class{ 'letsencrypt_wrap':
           agree_tos => true,
           email => 'admin@example.com',
           firstrun_standalone => true,
@@ -61,7 +61,7 @@ describe 'letsencrypt::exec::webroot', :type => 'define' do
     end
     it { should compile.with_all_deps }
     it { should_not contain_exec('letsencrypt-exec-webroot-foo.com')}
-    it { should contain_letsencrypt__exec__standalone('foo.com').with(
+    it { should contain_letsencrypt_wrap__exec__standalone('foo.com').with(
       :domains => [ 'd1.foo.com', 'd2.bar.com'],
       :server  => 'http://boulderx.example.com',
    )}
@@ -70,7 +70,7 @@ describe 'letsencrypt::exec::webroot', :type => 'define' do
     let(:pre_condition) do
       "
         Exec{ path => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin' }
-        class{ 'letsencrypt':
+        class{ 'letsencrypt_wrap':
           agree_tos => true,
           email => 'admin@example.com',
           firstrun_standalone => true,
@@ -91,7 +91,7 @@ describe 'letsencrypt::exec::webroot', :type => 'define' do
     let(:pre_condition) do
       "
         Exec{ path => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin' }
-        class{ 'letsencrypt':
+        class{ 'letsencrypt_wrap':
           agree_tos        => true,
           email            => 'admin@example.com',
           firstrun_webroot => '/firstrun-webroot',

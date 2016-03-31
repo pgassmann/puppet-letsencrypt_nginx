@@ -1,5 +1,5 @@
 require 'spec_helper'
-describe 'letsencrypt' do
+describe 'letsencrypt_wrap' do
 
   context 'with defaults for all parameters' do
     # fail email missing

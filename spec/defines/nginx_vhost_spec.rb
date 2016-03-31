@@ -1,6 +1,6 @@
 require File.expand_path(File.join(File.dirname(__FILE__),'../spec_helper'))
 
-describe 'letsencrypt::nginx::vhost', :type => 'define' do
+describe 'letsencrypt_wrap::nginx::vhost', :type => 'define' do
   let(:facts) do
     {
       :concat_basedir            => '/var/lib/puppet/concat',
@@ -10,7 +10,7 @@ describe 'letsencrypt::nginx::vhost', :type => 'define' do
   let(:pre_condition) do
     "
       Exec{ path => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin' }
-      class{ 'letsencrypt':
+      class{ 'letsencrypt_wrap':
         agree_tos => true,
         email => 'admin@example.com';
       }
@@ -33,8 +33,8 @@ describe 'letsencrypt::nginx::vhost', :type => 'define' do
   end
   context "with default" do
     it { should compile.with_all_deps }
-    it { should contain_letsencrypt__nginx__location('mydomain.example.com')}
-    it { should contain_letsencrypt__exec__webroot('mydomain.example.com').with(
+    it { should contain_letsencrypt_wrap__nginx__location('mydomain.example.com')}
+    it { should contain_letsencrypt_wrap__exec__webroot('mydomain.example.com').with(
       :domains => [
                   'mydomain.example.com',
                   'www.mydomain.example.com',
@@ -47,7 +47,7 @@ describe 'letsencrypt::nginx::vhost', :type => 'define' do
   let(:pre_condition) do
     "
       Exec{ path => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin' }
-      class{ 'letsencrypt':
+      class{ 'letsencrypt_wrap':
         agree_tos => true,
         email => 'admin@example.com';
       }
@@ -64,8 +64,8 @@ describe 'letsencrypt::nginx::vhost', :type => 'define' do
     "
   end
     it { should compile.with_all_deps }
-    it { should contain_letsencrypt__nginx__location('mydomain.example.com')}
-    it { should contain_letsencrypt__exec__webroot('mydomain.example.com').with(
+    it { should contain_letsencrypt_wrap__nginx__location('mydomain.example.com')}
+    it { should contain_letsencrypt_wrap__exec__webroot('mydomain.example.com').with(
       :domains => ['mydomain.example.com'],
       :before  => 'Service[nginx]',
     )}

@@ -1,12 +1,12 @@
 {
-  "name": "pgassmann-letsencrypt",
+  "name": "pgassmann-letsencrypt_wrap",
   "version": "0.1.0",
   "author": "pgassmann",
   "summary": "Let's Encrypt",
   "license": "Apache-2.0",
-  "source": "https://github.com/pgassmann/puppet-letsencrypt",
-  "project_page": "https://github.com/pgassmann/puppet-letsencrypt",
-  "issues_url": "https://github.com/pgassmann/puppet-letsencrypt/issues",
+  "source": "https://github.com/pgassmann/puppet-letsencrypt_wrap",
+  "project_page": "https://github.com/pgassmann/puppet-letsencrypt_wrap",
+  "issues_url": "https://github.com/pgassmann/puppet-letsencrypt_wrap/issues",
   "tags": [
     "letsencrypt"
   ],

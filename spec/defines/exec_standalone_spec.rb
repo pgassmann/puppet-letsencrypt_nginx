@@ -1,6 +1,6 @@
 require File.expand_path(File.join(File.dirname(__FILE__),'../spec_helper'))
 
-describe 'letsencrypt::exec::standalone', :type => 'define' do
+describe 'letsencrypt_wrap::exec::standalone', :type => 'define' do
   let(:facts) do
     {
       :concat_basedir            => '/var/lib/puppet/concat',
@@ -10,7 +10,7 @@ describe 'letsencrypt::exec::standalone', :type => 'define' do
   let(:pre_condition) do
     "
       Exec{ path => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin' }
-      class{ 'letsencrypt':
+      class{ 'letsencrypt_wrap':
         email     => 'admin@example.com',
         agree_tos => true,
         server    => 'https://acme-v01.api.letsencrypt.org/directory',

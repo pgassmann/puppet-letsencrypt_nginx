@@ -1,5 +1,5 @@
 require 'spec_helper'
-describe 'letsencrypt::install' do
+describe 'letsencrypt_wrap::install' do
 
   context 'with defaults for all parameters' do
     it { should compile.with_all_deps }

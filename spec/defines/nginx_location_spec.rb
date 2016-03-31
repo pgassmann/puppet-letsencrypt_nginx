@@ -1,6 +1,6 @@
 require File.expand_path(File.join(File.dirname(__FILE__),'../spec_helper'))
 
-describe 'letsencrypt::nginx::location', :type => 'define' do
+describe 'letsencrypt_wrap::nginx::location', :type => 'define' do
   let(:facts) do
     {
       :concat_basedir            => '/var/lib/puppet/concat',
@@ -10,7 +10,7 @@ describe 'letsencrypt::nginx::location', :type => 'define' do
   let(:pre_condition) do
     "
       Exec{ path => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin' }
-      class{ 'letsencrypt':
+      class{ 'letsencrypt_wrap':
         agree_tos => true,
         email => 'admin@example.com';
       }
