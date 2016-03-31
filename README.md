@@ -16,8 +16,10 @@
 ## Overview
 
 The goal of [Let's Encrypt](https://letsencrypt.org) is to automate ssl certificates.
-The tool to automate server configuration is Puppet.
-This module bridges the two efforts.
+
+This module is a helper to manage letsencrypt for puppet managed nginx vhosts.
+
+Works with danzilio/letsencrypt and jfryman/nginx
 
 ## Module Description
 
