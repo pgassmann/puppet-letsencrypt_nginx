@@ -1,28 +1,38 @@
 require 'spec_helper'
-describe 'letsencrypt_wrap' do
-
+describe 'letsencrypt_nginx' do
+  let(:facts) do
+    {
+      :operatingsystem        => 'Ubuntu',
+      :operatingsystemrelease => '14.04',
+      :concat_basedir         => '/var/lib/puppet/concat',
+    }
+  end
   context 'with defaults for all parameters' do
     # fail email missing
   end
-  context 'with params' do
-    let(:params) do
-      {
-        :agree_tos => true,
-        :email => 'admin@example.com',
-      }
+  context 'with default params and letsencrypt defaults' do
+    let(:pre_condition) do
+      "
+        # Exec resource  default
+        Exec{ path => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin' }
+        # letsencrypt minimal params
+        class { ::letsencrypt:
+          email => 'foo@example.com',
+        }
+      "
     end
     it { should compile.with_all_deps }
   end
   context 'with resources' do
-
-    let(:facts) do
-      {
-        :concat_basedir            => '/var/lib/puppet/concat',
-      }
-    end
     let(:pre_condition) do
       "
+        # Exec resource  default
         Exec{ path => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin' }
+        # letsencrypt minimal params
+        class { ::letsencrypt:
+          email => 'foo@example.com',
+        }
+        # nginx configuration
         include nginx
         nginx::resource::vhost{'mydomain.example.com':
           server_name => [
@@ -43,22 +53,22 @@ describe 'letsencrypt_wrap' do
     let(:params) do
       {
         :firstrun_standalone => false,
-        :agree_tos => true,
-        :email => 'admin@example.com',
         :nginx_vhosts => {
           'mydomain.example.com' => {},
         },
         :nginx_locations => {
           'default' => {},
-        },
-        :exec_standalone => {
-          'foo.com' => {},
-        },
-        :exec_webroot => {
-          'bar.com' => {},
+          'foo.net' => {},
         },
       }
     end
     it { should compile.with_all_deps }
+    it { should contain_nginx__resource__vhost('default').with(
+      :listen_options  => 'default_server',
+      :www_root        =>  '/var/lib/letsencrypt/webroot',
+      :server_name     => ['default'],
+    )}
+    it { should contain_letsencrypt_nginx__location('default')}
+    it { should contain_letsencrypt_nginx__location('foo.net')}
   end
 end

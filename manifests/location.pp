@@ -1,8 +1,8 @@
 # Configure acme-challenge location webroot
-define letsencrypt_wrap::nginx::location(
+define letsencrypt_nginx::location(
   $vhost    = $name,
 ){
-  include letsencrypt_wrap::nginx
+  include letsencrypt_nginx
   # if vhost is set as default_vhost, then the location is already added.
   unless defined(Nginx::Resource::Location["${vhost}-letsencrypt"]) {
     if defined(Nginx::Resource::Vhost[$vhost]){
@@ -21,7 +21,7 @@ define letsencrypt_wrap::nginx::location(
     nginx::resource::location{"${vhost}-letsencrypt":
       vhost    =>  $vhost,
       location =>  '/.well-known/acme-challenge',
-      www_root =>  $letsencrypt_wrap::webroot,
+      www_root =>  $letsencrypt_nginx::webroot,
       ssl      =>  $real_vhost_ssl,
     }
   }
