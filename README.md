@@ -23,7 +23,7 @@ Works with danzilio/letsencrypt and jfryman/nginx
 
 ## Module Description
 
-The goal of this module is to enable ssl on puppet managed resources like nginx_vhosts as
+The goal of this module is to enable ssl on puppet managed nginx vhosts as
 simple as possible. The module reuses the domains configured in the vhost server_name
 
 For the authorization, the webroot challenge is used and a custom location is
@@ -60,7 +60,7 @@ The fetching of the configured domains is parse order dependent.
 #### Let's encrypt nginx vhost
 
     class{'nginx':
-      nginx_vhosts => {
+      vhosts => {
         'letsencrypt-test1.example.com' => {
               server_name      => [
                 'letsencrypt-test1.example.com',
@@ -80,16 +80,16 @@ The fetching of the configured domains is parse order dependent.
     }
     class { 'letsencrypt_nginx':
       firstrun_webroot => '/usr/share/nginx/html'
-      nginx_vhosts     => {
+      vhosts           => {
         'letsencrypt-test1.example.com' => {}
       }
     }
 
-To add ssl configuration to an existing installation, you need first to configure the nginx_locations
+To add ssl configuration to an existing installation, you need first to configure the locations
 for your default vhost and your existing vhost.
 
     class { 'letsencrypt_nginx':
-      nginx_locations     => {
+      locations => {
         'default' => {}
         'letsencrypt-test1.example.com' => {}
       }
@@ -104,7 +104,7 @@ If this is applied successfully, you can then add the ssl configuration to your 
       - letsencrypt
       - letsencrypt_nginx
 
-    nginx::nginx_vhosts:
+    nginx::vhosts:
       'letsencrypt-test1.example.com':
           server_name:
                                 - 'letsencrypt-test1.example.com'
@@ -117,7 +117,7 @@ If this is applied successfully, you can then add the ssl configuration to your 
 
     letsencrypt::email: 'foo@example.com'
     letsencrypt_nginx::firstrun_webroot: '/usr/share/nginx/html'
-    letsencrypt_nginx::nginx_vhosts:
+    letsencrypt_nginx::vhosts:
       'letsencrypt-test1.example.com': {}
 
 
@@ -162,7 +162,7 @@ Set this to true if the webserver does not start automatically when installed.
 letsencrypt will use standalone mode to get the certificate
 before the webserver is started the first time.
 
-[*nginx_locations*], [*nginx_vhosts*]
+[*locations*], [*vhosts*]
 These Parameters can be used to create instances of these defined types through hiera
 
 ## Limitations

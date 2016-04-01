@@ -53,10 +53,10 @@ describe 'letsencrypt_nginx' do
     let(:params) do
       {
         :firstrun_standalone => false,
-        :nginx_vhosts => {
+        :vhosts => {
           'mydomain.example.com' => {},
         },
-        :nginx_locations => {
+        :locations => {
           'default' => {},
           'foo.net' => {},
         },

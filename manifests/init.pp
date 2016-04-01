@@ -24,14 +24,14 @@
 #   letsencrypt will use standalone mode to get the certificate
 #   before the webserver is started the first time.
 #
-# [*nginx_locations*], [*nginx_vhosts*]
+# [*locations*], [*vhosts*]
 #   These Parameters can be used to create instances of these defined types through hiera
 #
 # === Examples
 #
 #  class { 'letsencrypt_nginx':
 #    firstrun_webroot => '/usr/share/nginx/html'
-#    nginx_vhosts     => {
+#    vhosts     => {
 #      'mydomain.example.com' => {}
 #    }
 #  }
@@ -49,8 +49,8 @@ class letsencrypt_nginx (
   $webroot             = '/var/lib/letsencrypt/webroot',
   $firstrun_webroot    = undef, # For Debian & Nginx: /usr/share/nginx/html
   $firstrun_standalone = false,
-  $nginx_locations     = {},
-  $nginx_vhosts        = {},
+  $locations           = {},
+  $vhosts              = {},
 ) {
   include nginx
   require ::letsencrypt
@@ -81,8 +81,8 @@ class letsencrypt_nginx (
     refreshonly => true,
   }
 
-  create_resources('letsencrypt_nginx::location',  $nginx_locations)
-  create_resources('letsencrypt_nginx::vhost',     $nginx_vhosts)
+  create_resources('letsencrypt_nginx::location',  $locations)
+  create_resources('letsencrypt_nginx::vhost',     $vhosts)
 
   # configure location for letsencrypt challenge path for default vhost
   ensure_resource('letsencrypt_nginx::location', $default_vhost_name )
