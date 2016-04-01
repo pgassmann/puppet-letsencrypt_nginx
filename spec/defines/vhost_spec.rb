@@ -92,7 +92,7 @@ describe 'letsencrypt_nginx::vhost', :type => 'define' do
       :notify  => 'Service[nginx]',
       :plugin  => 'standalone',
       :manage_cron    => false,
-      :notify  => 'Exec[set letsencrypt_firstrun fact]',
+      :notify  => 'Exec[set letsencrypt_nginx_firstrun fact]',
     )}
     it { should contain_letsencrypt__certonly('foo.com').with(
       :domains => [ 'd1.foo.com', 'd2.bar.com'],
@@ -121,7 +121,7 @@ describe 'letsencrypt_nginx::vhost', :type => 'define' do
     let(:facts) do
       {
         :concat_basedir            => '/var/lib/puppet/concat',
-        :letsencrypt_firstrun      => 'SUCCESS'
+        :letsencrypt_nginx_firstrun      => 'SUCCESS'
       }
     end
     it { should compile.with_all_deps }
@@ -130,7 +130,7 @@ describe 'letsencrypt_nginx::vhost', :type => 'define' do
       :notify  => 'Service[nginx]',
       :plugin  => 'standalone',
       :manage_cron    => false,
-      :notify  => 'Exec[set letsencrypt_firstrun fact]',
+      :notify  => 'Exec[set letsencrypt_nginx_firstrun fact]',
     )}
     it { should contain_letsencrypt__certonly('foo.com').with(
       :domains => [ 'd1.foo.com', 'd2.bar.com'],
@@ -161,7 +161,7 @@ describe 'letsencrypt_nginx::vhost', :type => 'define' do
       :plugin  => 'webroot',
       :manage_cron    => false,
       :webroot_paths  => ['/usr/share/nginx/html'],
-      :notify  => 'Exec[set letsencrypt_firstrun fact]',
+      :notify  => 'Exec[set letsencrypt_nginx_firstrun fact]',
     )}
     it { should contain_letsencrypt__certonly('foo.com').with(
       :domains => [ 'd1.foo.com', 'd2.bar.com'],
@@ -185,7 +185,7 @@ describe 'letsencrypt_nginx::vhost', :type => 'define' do
     let(:facts) do
       {
         :concat_basedir            => '/var/lib/puppet/concat',
-        :letsencrypt_firstrun      => 'SUCCESS'
+        :letsencrypt_nginx_firstrun      => 'SUCCESS'
       }
     end
     let(:title) { 'foo.com' }
@@ -199,7 +199,7 @@ describe 'letsencrypt_nginx::vhost', :type => 'define' do
       :plugin  => 'webroot',
       :manage_cron    => false,
       :webroot_paths  => ['/usr/share/nginx/html'],
-      :notify  => 'Exec[set letsencrypt_firstrun fact]',
+      :notify  => 'Exec[set letsencrypt_nginx_firstrun fact]',
     )}
     it { should contain_letsencrypt__certonly('foo.com').with(
       :domains => [ 'd1.foo.com', 'd2.bar.com'],

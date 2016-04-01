@@ -62,17 +62,17 @@ define letsencrypt_nginx::vhost(
     }
   }
 
-  if $letsencrypt_nginx::firstrun_standalone and $::letsencrypt_firstrun != 'SUCCESS' {
+  if $letsencrypt_nginx::firstrun_standalone and $::letsencrypt_nginx_firstrun != 'SUCCESS' {
     letsencrypt::certonly{ "${name}_firstrun_standalone":
       plugin          => 'standalone',
       domains         => $real_domains,
       additional_args => $additional_args,
       manage_cron     => false,
       before          => Letsencrypt::Certonly[$name],
-      notify          => Exec['set letsencrypt_firstrun fact'];
+      notify          => Exec['set letsencrypt_nginx_firstrun fact'];
     }
   }
-  if $letsencrypt_nginx::firstrun_webroot and $::letsencrypt_firstrun != 'SUCCESS'{
+  if $letsencrypt_nginx::firstrun_webroot and $::letsencrypt_nginx_firstrun != 'SUCCESS'{
     letsencrypt::certonly{ "${name}_firstrun_webroot":
       plugin          => 'webroot',
       domains         => $real_domains,
@@ -80,7 +80,7 @@ define letsencrypt_nginx::vhost(
       additional_args => $additional_args,
       manage_cron     => false,
       before          => Letsencrypt::Certonly[$name],
-      notify          => Exec['set letsencrypt_firstrun fact'];
+      notify          => Exec['set letsencrypt_nginx_firstrun fact'];
     }
   }
   # Always define letsencrypt::certonly with webroot for cronjob,
