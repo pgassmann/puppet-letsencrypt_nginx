@@ -1,34 +1,36 @@
-# Let's Encrypt
+# Let's Encrypt Nginx
 # == Define: letsencrypt_nginx::vhost
 #
 # Automatically get ssl certificate for nginx vhost
 #
 # === Parameters
 #
-# Document parameters here.
+#  * `domains`:
+#    Array of domains to get ssl certificate for.
+#    If not defined, it uses the server_name array defined in the vhost.
+#    Use these domains instead of reading server_name array of vhost.
 #
-# [*domains*]
-#  Array of domains to get ssl certificate for.
-#  If not define, it uses the server_name array defined in the vhost.
-#  Use these domains instead of reading server_name array of vhost.
-# [*exclude_domains*]
-#  Array of servernames that should not be added as alt names for the ssl cert.
-#  E.g. Elements of server_name that are defined in the vhost,
-#  but are not public resolvable or not valid fqdns.
-# [*webroot_paths*]
-#   Passed to letsencrypt::certonly
-#   An array of webroot paths for the domains in `domains`.
-#   Required if using `plugin => 'webroot'`. If `domains` and
-#   `webroot_paths` are not the same length, `webroot_paths`
-#   will cycle to make up the difference.
-# [*additional_args*]
-#   Passed to letsencrypt::certonly
-#   An array of additional command line arguments to pass to the
-#   `letsencrypt-auto` command.
-# [*manage_cron*]
-#   Passed to letsencrypt::certonly
-#   Boolean indicating whether or not to schedule cron job for renewal.
-#   Runs daily but only renews if near expiration, e.g. within 10 days.
+#  * `exclude_domains`:
+#    Array of servernames that should not be added as alt names for the ssl cert.
+#    E.g. Elements of server_name that are defined in the vhost,
+#    but are not public resolvable or not valid fqdns.
+#
+#  * `webroot_paths`:
+#    Passed to letsencrypt::certonly, not recommended to change
+#    An array of webroot paths for the domains in `domains`.
+#    Required if using `plugin => 'webroot'`. If `domains` and
+#    `webroot_paths` are not the same length, `webroot_paths`
+#    will cycle to make up the difference.
+#
+#  * `additional_args`:
+#    Passed to letsencrypt::certonly
+#    An array of additional command line arguments to pass to the
+#    `letsencrypt-auto` command.
+#
+#  * `manage_cron`:
+#    Passed to letsencrypt::certonly, default: true
+#    Boolean indicating whether or not to schedule cron job for renewal.
+#    Runs daily but only renews if near expiration, e.g. within 10 days.
 #
 define letsencrypt_nginx::vhost(
   $vhost           = $name,

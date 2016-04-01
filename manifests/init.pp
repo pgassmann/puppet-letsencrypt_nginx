@@ -1,48 +1,31 @@
-# Let's Encrypt
+# Let's Encrypt Nginx
 # == Class: letsencrypt_nginx
 #
 # Let's Encrypt base configuration and hiera interface.
 #
 # === Parameters
 #
-# [*default_vhost_name*]
-#   name of nginx vhost that catches all requests that do not match any other server_name
+#  * `default_vhost_name`:
+#    name of nginx vhost that catches all requests that do not match any other server_name
 #
-# [*webroot*]
-#   This directory is configured as webroot for the webroot authentication
-#   locations added to the vhost to allow renewals
+#  * `webroot`:
+#    This directory is configured as webroot for the webroot authentication
+#    locations added to the vhost to allow renewals
 #
-# [*firstrun_webroot*]
-#   Use different webroot on first run.
-#   Set this to the default webroot of the webserver if the service
-#   starts automatically when installed.
-#   E.g. Nginx on Ubuntu: /usr/share/nginx/html
+#  * `firstrun_webroot`:
+#    Use different webroot on first run.
+#    Set this to the default webroot of the webserver if the service
+#    starts automatically when installed.
+#    E.g. For Nginx on Ubuntu: /usr/share/nginx/html
 #
-# [*firstrun_standalone*]
-#   Use standalone mode on first run.
-#   Set this to true if the webserver does not start automatically when installed.
-#   letsencrypt will use standalone mode to get the certificate
-#   before the webserver is started the first time.
+#  * `firstrun_standalone`:
+#    Use standalone mode on first run.
+#    Set this to true if the webserver does not start automatically when installed.
+#    letsencrypt will use standalone mode to get the certificate
+#    before the webserver is started the first time.
 #
-# [*locations*], [*vhosts*]
-#   These Parameters can be used to create instances of these defined types through hiera
-#
-# === Examples
-#
-#  class { 'letsencrypt_nginx':
-#    firstrun_webroot => '/usr/share/nginx/html'
-#    vhosts     => {
-#      'mydomain.example.com' => {}
-#    }
-#  }
-#
-# === Authors
-#
-# Philipp Gassmann <phiphi@phiphi.ch>
-#
-# === Copyright
-#
-# Copyright 2015 Philipp Gassmann here, unless otherwise noted.
+#  * `locations`, `vhosts`:
+#    These Parameters can be used to create instances of these defined types through hiera
 #
 class letsencrypt_nginx (
   $default_vhost_name  = 'default',

@@ -1,4 +1,12 @@
-# Configure acme-challenge location webroot
+# Let's Encrypt Nginx
+# == Define: letsencrypt_nginx::location
+#
+# Configure acme-challenge location webroot for a nginx vhost
+#
+# === Parameters
+#
+#  * `vhost`: vhost to configure location for, defaults to $name
+#
 define letsencrypt_nginx::location(
   $vhost    = $name,
 ){
