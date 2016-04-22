@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file. This projec
 
 ## [Unreleased][unreleased]
 
+## [1.1.2] - 2016-04-22
+* Fix for Puppet 4.x
+
 ## [1.1.1] - 2016-04-01
 * Initial release of letsencrypt_nginx using letsencrypt::certonly from danzilio-letsencrypt
 

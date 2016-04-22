@@ -18,9 +18,10 @@ define letsencrypt_nginx::location(
     } else {
       $vhost_ssl = true
     }
-    # getparam returns undef if specified false or if not defined.
+    # getparam returns undef (or '' in Puppet 4) if specified false or if not defined.
     # Set it to default of vhost param ssl.
-    if $vhost_ssl == undef {
+    # Note: It should be true for every vhost except the default vhost
+    if ($vhost_ssl == undef or $vhost_ssl == '') {
       $real_vhost_ssl = false
     } else {
       $real_vhost_ssl = $vhost_ssl

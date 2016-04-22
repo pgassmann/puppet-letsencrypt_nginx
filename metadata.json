@@ -1,6 +1,6 @@
 {
   "name": "pgassmann-letsencrypt_nginx",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "author": "pgassmann",
   "summary": "Let's Encrypt Nginx",
   "license": "Apache-2.0",
@@ -16,7 +16,8 @@
       "operatingsystemrelease": [
         "10.04",
         "12.04",
-        "14.04"
+        "14.04",
+        "16.04"
       ]
     },
     {
