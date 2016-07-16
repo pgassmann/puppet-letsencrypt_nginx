@@ -37,6 +37,7 @@ describe 'letsencrypt_nginx::location', :type => 'define' do
       :location => '/.well-known/acme-challenge',
       :www_root =>  '/var/lib/letsencrypt/webroot',
       :ssl      =>  true,
+      :auth_basic => 'off',
    )}
   end
 end

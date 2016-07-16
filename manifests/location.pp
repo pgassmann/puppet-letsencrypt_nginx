@@ -28,10 +28,11 @@ define letsencrypt_nginx::location(
     }
     validate_bool($real_vhost_ssl)
     nginx::resource::location{"${vhost}-letsencrypt":
-      vhost    =>  $vhost,
-      location =>  '/.well-known/acme-challenge',
-      www_root =>  $letsencrypt_nginx::webroot,
-      ssl      =>  $real_vhost_ssl,
+      vhost      =>  $vhost,
+      location   =>  '/.well-known/acme-challenge',
+      www_root   =>  $letsencrypt_nginx::webroot,
+      ssl        =>  $real_vhost_ssl,
+      auth_basic => 'off',
     }
   }
 }
