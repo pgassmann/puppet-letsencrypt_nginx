@@ -37,6 +37,8 @@ class letsencrypt_nginx (
 ) {
   include nginx
   require ::letsencrypt
+  
+  Exec { path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ] }
 
   # define webroot directory for letsencrypt challenge
   if $webroot == '/var/lib/letsencrypt/webroot' {
