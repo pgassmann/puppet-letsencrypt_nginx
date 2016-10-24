@@ -58,30 +58,26 @@ The fetching of the configured domains is parse order dependent.
 
 #### Let's encrypt nginx vhost
 
-    class{'nginx':
-      vhosts => {
-        'letsencrypt-test1.example.com' => {
-              server_name      => [
-                'letsencrypt-test1.example.com',
-                'letsencrypt-test2.example.com',
-              ],
-              proxy            => 'http://10.1.2.3',
-              ssl              => true,
-              rewrite_to_https => true,
-              ssl_key          => '/etc/letsencrypt/live/letsencrypt-test1.example.com/privkey.pem',
-              ssl_cert         => '/etc/letsencrypt/live/letsencrypt-test1.example.com/fullchain.pem',
 
-        },
-      },
+    nginx::resource::vhost { 'letsencrypt-test1.example.com':
+      server_name      => [
+        'letsencrypt-test1.example.com',
+        'letsencrypt-test2.example.com',
+      ],
+      proxy            => 'http://10.1.2.3',
+      ssl              => true,
+      rewrite_to_https => true,
+      ssl_key          => '/etc/letsencrypt/live/letsencrypt-test1.example.com/privkey.pem',
+      ssl_cert         => '/etc/letsencrypt/live/letsencrypt-test1.example.com/fullchain.pem',
     }
     class { ::letsencrypt:
       email => 'foo@example.com',
     }
     class { 'letsencrypt_nginx':
-      firstrun_webroot => '/usr/share/nginx/html'
+      firstrun_webroot => '/usr/share/nginx/html',
       vhosts           => {
-        'letsencrypt-test1.example.com' => {}
-      }
+        'letsencrypt-test1.example.com' => {},
+      },
     }
 
 To add ssl configuration to an existing installation, you need first to configure the locations
