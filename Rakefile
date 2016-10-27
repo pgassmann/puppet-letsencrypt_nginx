@@ -1,6 +1,6 @@
 require 'puppetlabs_spec_helper/rake_tasks'
 require 'puppet-lint/tasks/puppet-lint'
-require 'puppet_blacksmith'
+require 'puppet_blacksmith/rake_tasks'
 require "highline/import"
 
 PuppetLint.configuration.send('disable_80chars')
@@ -44,6 +44,8 @@ task :spec_clean do
 end
 
 namespace :module do
+  # override module:bump task
+  Rake::Task["module:bump"].clear
   desc 'bump the module version'
   task :bump do
     level = :patch
@@ -66,6 +68,8 @@ namespace :module do
     say("removing git tag v#{metadata.version}")
   end
 
+  # override module:tag task
+  Rake::Task["module:tag"].clear
   desc 'tag the release'
   task :tag do
     metadata_reload
