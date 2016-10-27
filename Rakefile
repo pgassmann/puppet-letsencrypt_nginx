@@ -1,43 +1,22 @@
-require 'rubygems'
 require 'puppetlabs_spec_helper/rake_tasks'
 require 'puppet-lint/tasks/puppet-lint'
+require 'puppet_blacksmith'
+require "highline/import"
+
 PuppetLint.configuration.send('disable_80chars')
 PuppetLint.configuration.ignore_paths = ["spec/**/*.pp", "pkg/**/*.pp"]
 
-# use librarian-puppet to manage fixtures instead of .fixtures.yml
-# offers more possibilities like explicit version management, forge downloads,...
-task :librarian_spec_prep do
-  sh "librarian-puppet install --path=spec/fixtures/modules/"
-  pwd = Dir.pwd.strip
-  unless File.directory?("#{pwd}/spec/fixtures/modules/letsencrypt_nginx")
-    # workaround for windows as symlinks are not supported with 'ln -s' in git-bash
-    if (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil
-      begin
-        sh "cmd /c \"mklink /d #{pwd}\\spec\\fixtures\\modules\\letsencrypt_nginx #{pwd}\""
-      rescue Exception => e
-        puts '-----------------------------------------'
-        puts 'Git Bash must be started as Administrator'
-        puts '-----------------------------------------'
-        raise e
-      end
-    else
-      sh "ln -s #{pwd} #{pwd}/spec/fixtures/modules/letsencrypt_nginx"
-    end
-  end
+def metadata
+  @metadata ||= Blacksmith::Modulefile.new
 end
 
-# Windows rake spec task for git bash
-# default spec task fails because of unsupported symlinks on windows
-task :spec_win do
-  sh "rspec --pattern spec/\{classes,defines,unit,functions,hosts,integration\}/\*\*/\*_spec.rb --color"
+def metadata_reload
+  @metadata = Blacksmith::Modulefile.new
 end
 
-task :spec_clean_win do
-  pwd = Dir.pwd.strip
-  sh "cmd /c \"rmdir /q #{pwd}\\spec\\fixtures\\modules\\letsencrypt_nginx\""
+def git
+  @git ||= Blacksmith::Git.new
 end
-
-task :spec_prep => :librarian_spec_prep
 
 desc "Validate manifests, templates, and ruby files"
 task :validate do
@@ -52,8 +31,54 @@ task :validate do
   end
 end
 
-if (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil
-  task :default => [:spec_prep, :spec_win, :spec_clean, :spec_clean_win, :lint]
-else
-  task :default => [:spec, :validate]
+task :spec_prep do
+  sh('bundle exec librarian-puppet install --path spec/fixtures/modules')
+  pwd = Dir.pwd.strip
+  unless File.exists?("#{pwd}/spec/fixtures/modules/#{metadata.name}")
+    sh("ln -s #{pwd} #{pwd}/spec/fixtures/modules/#{metadata.name}")
+  end
 end
+
+task :spec_clean do
+  sh('rm -rf spec/fixtures/modules/*')
+end
+
+namespace :module do
+  desc 'bump the module version'
+  task :bump do
+    level = :patch
+    level = :minor if agree('Did you add new features?')
+    level = :major if agree('Did you change the API so code who uses this module needs to change?')
+    if agree("The selected level for the realease is '#{level.to_s}'. Do you agree?")
+      new_version = metadata.send("bump_#{level}!")
+      say("Bumping version from #{metadata.version} to #{new_version}")
+    else
+      say('canceling release')
+      exit -1
+    end
+  end
+
+  desc 'clear the tag'
+  task :clear_tag do
+    metadata_reload
+    git.exec_git("tag --delete v#{metadata.version}")
+    git.exec_git("push origin :refs/tags/v#{metadata.version}")
+    say("removing git tag v#{metadata.version}")
+  end
+
+  desc 'tag the release'
+  task :tag do
+    metadata_reload
+    git.tag_pattern = "v%s"
+    git.tag!(metadata.version)
+    say("taging git revision with v#{metadata.version}")
+  end
+end
+
+desc 'release the puppet module (bump, tag and push)'
+task :release => ['module:bump', 'module:tag', 'module:push']
+
+desc 're-release the puppet module in case the build failed (clear_tag, tag and push)'
+task :rerelease => ['module:clear_tag', 'module:tag', 'module:push']
+
+task :default => :release_checks
