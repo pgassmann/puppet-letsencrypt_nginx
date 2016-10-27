@@ -3,7 +3,12 @@ describe 'letsencrypt_nginx' do
   let(:facts) do
     {
       :operatingsystem        => 'Ubuntu',
+      :osfamily               => 'Debian',
       :operatingsystemrelease => '14.04',
+      :lsbdistcodename        => 'trusty',
+      :lsbdistid              => 'Ubuntu',
+      :ipaddress6             => '::1',
+      :path                   => '/usr/bin',
       :concat_basedir         => '/var/lib/puppet/concat',
     }
   end

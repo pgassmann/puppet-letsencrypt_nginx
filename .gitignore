@@ -3,3 +3,4 @@ pkg/
 .librarian
 .tmp
 *.lock
+/.bundle

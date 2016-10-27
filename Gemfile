@@ -15,10 +15,15 @@ gem 'highline'
 # rspec must be v2 for ruby 1.8.7
 if RUBY_VERSION >= '1.8.7' and RUBY_VERSION < '1.9'
   gem 'rspec', '~> 2.0'
+  gem 'rake', '~> 10.0'
+else
+  gem 'rake'
 end
 
-# json >= 2.0.0 requires ruby 2.0.0
 if RUBY_VERSION < '2.0'
-  gem 'json', '~> 1'
-  gem 'json_pure', '~> 1'
+  # json 2.x requires ruby 2.0. Lock to 1.8
+  gem 'json', '~> 1.8'
+  gem 'json_pure', '~> 1.0'
+else
+  gem 'json'
 end
