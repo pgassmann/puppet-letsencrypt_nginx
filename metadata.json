@@ -1,6 +1,6 @@
 {
   "name": "pgassmann-letsencrypt_nginx",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "author": "pgassmann",
   "summary": "Let's Encrypt Nginx",
   "license": "Apache-2.0",
