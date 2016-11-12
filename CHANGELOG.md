@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file. This projec
 
 ## [Unreleased][unreleased]
 
+## [1.2.0] - 2016-11-12
+* Switch nginx module dependency from jfryman to voxpupuli (puppet-nginx)
+* 100% Test coverage
+
 ## [1.1.3] - 2016-10-27
 * Disable basic auth for acme-challenge location
 * Update Documentation
