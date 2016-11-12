@@ -1,17 +1,22 @@
 require File.expand_path(File.join(File.dirname(__FILE__),'../spec_helper'))
 
 describe 'letsencrypt_nginx::location', :type => 'define' do
-  let(:facts) do
+  let(:facts_default) do
     {
       :operatingsystem        => 'Ubuntu',
       :osfamily               => 'Debian',
       :operatingsystemrelease => '14.04',
       :lsbdistcodename        => 'trusty',
       :lsbdistid              => 'Ubuntu',
+      :lsbdistrelease         => '14.04',
       :ipaddress6             => '::1',
       :path                   => '/usr/bin',
+      :puppetversion          => Puppet.version,
       :concat_basedir         => '/var/lib/puppet/concat',
     }
+  end
+  let(:facts) do
+    facts_default.merge({})
   end
   let(:title) { 'mydomain.example.com' }
   let(:pre_condition) do

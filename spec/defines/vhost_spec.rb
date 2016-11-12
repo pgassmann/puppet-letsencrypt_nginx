@@ -1,17 +1,22 @@
 require File.expand_path(File.join(File.dirname(__FILE__),'../spec_helper'))
 
 describe 'letsencrypt_nginx::vhost', :type => 'define' do
-  let(:facts) do
+  let(:facts_default) do
     {
       :operatingsystem        => 'Ubuntu',
       :osfamily               => 'Debian',
       :operatingsystemrelease => '14.04',
       :lsbdistcodename        => 'trusty',
       :lsbdistid              => 'Ubuntu',
+      :lsbdistrelease         => '14.04',
       :ipaddress6             => '::1',
       :path                   => '/usr/bin',
+      :puppetversion          => Puppet.version,
       :concat_basedir         => '/var/lib/puppet/concat',
     }
+  end
+  let(:facts) do
+    facts_default.merge({})
   end
   let(:title) { 'mydomain.example.com' }
   let(:pre_condition) do
@@ -39,6 +44,7 @@ describe 'letsencrypt_nginx::vhost', :type => 'define' do
   end
   context "with default" do
     it { should compile.with_all_deps }
+    it { should contain_letsencrypt_nginx__vhost('mydomain.example.com')}
     it { should contain_letsencrypt_nginx__location('mydomain.example.com')}
     it { should contain_letsencrypt__certonly('mydomain.example.com').with(
       :domains => [
@@ -94,6 +100,8 @@ describe 'letsencrypt_nginx::vhost', :type => 'define' do
       }
     end
     it { should compile.with_all_deps }
+    it { should contain_letsencrypt_nginx__location('foo.com')}
+    it { should contain_nginx__resource__location('foo.com-letsencrypt')}
     it { should contain_letsencrypt__certonly('foo.com_firstrun_standalone').with(
       :domains => [ 'd1.foo.com', 'd2.bar.com'],
       :notify  => 'Service[nginx]',
@@ -126,17 +134,9 @@ describe 'letsencrypt_nginx::vhost', :type => 'define' do
       }
     end
     let(:facts) do
-      {
-        :operatingsystem        => 'Ubuntu',
-        :osfamily               => 'Debian',
-        :operatingsystemrelease => '14.04',
-        :lsbdistcodename        => 'trusty',
-        :lsbdistid              => 'Ubuntu',
-        :ipaddress6             => '::1',
-        :path                   => '/usr/bin',
-        :concat_basedir         => '/var/lib/puppet/concat',
+      facts_default.merge({
         :letsencrypt_nginx_firstrun      => 'SUCCESS'
-      }
+      })
     end
     it { should compile.with_all_deps }
     it { should_not contain_letsencrypt__certonly('foo.com_firstrun_standalone').with(
@@ -197,17 +197,9 @@ describe 'letsencrypt_nginx::vhost', :type => 'define' do
       "
     end
     let(:facts) do
-      {
-        :operatingsystem        => 'Ubuntu',
-        :osfamily               => 'Debian',
-        :operatingsystemrelease => '14.04',
-        :lsbdistcodename        => 'trusty',
-        :lsbdistid              => 'Ubuntu',
-        :ipaddress6             => '::1',
-        :path                   => '/usr/bin',
-        :concat_basedir         => '/var/lib/puppet/concat',
+      facts_default.merge({
         :letsencrypt_nginx_firstrun      => 'SUCCESS'
-      }
+      })
     end
     let(:title) { 'foo.com' }
     let(:params) do

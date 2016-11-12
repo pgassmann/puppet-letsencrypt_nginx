@@ -1,16 +1,21 @@
 require 'spec_helper'
 describe 'letsencrypt_nginx' do
-  let(:facts) do
+  let(:facts_default) do
     {
       :operatingsystem        => 'Ubuntu',
       :osfamily               => 'Debian',
       :operatingsystemrelease => '14.04',
       :lsbdistcodename        => 'trusty',
       :lsbdistid              => 'Ubuntu',
+      :lsbdistrelease         => '14.04',
       :ipaddress6             => '::1',
       :path                   => '/usr/bin',
+      :puppetversion          => Puppet.version,
       :concat_basedir         => '/var/lib/puppet/concat',
     }
+  end
+  let(:facts) do
+    facts_default.merge({})
   end
   context 'with defaults for all parameters' do
     # fail email missing
@@ -26,6 +31,13 @@ describe 'letsencrypt_nginx' do
         }
       "
     end
+    it { is_expected.to contain_class('letsencrypt')}
+    it { is_expected.to contain_class('letsencrypt_nginx')}
+    it { is_expected.to contain_file('/var/lib/letsencrypt')}
+    it { is_expected.to contain_file('/var/lib/letsencrypt/webroot')}
+    it { is_expected.to contain_exec('set letsencrypt_nginx_firstrun fact').with_refreshonly(true)}
+    it { should contain_letsencrypt_nginx__location('default')}
+    it { should contain_nginx__resource__location('default-letsencrypt')}
     it { should compile.with_all_deps }
   end
   context 'with resources' do
@@ -73,7 +85,9 @@ describe 'letsencrypt_nginx' do
       :www_root        =>  '/var/lib/letsencrypt/webroot',
       :server_name     => ['default'],
     )}
+    it { should contain_nginx__resource__location('default-letsencrypt')}
     it { should contain_letsencrypt_nginx__location('default')}
+    it { should contain_nginx__resource__location('foo.net-letsencrypt')}
     it { should contain_letsencrypt_nginx__location('foo.net')}
   end
 end
