@@ -8,17 +8,10 @@ gem 'puppet-lint', '>= 1.0.0'
 gem 'facter', '>= 1.7.0'
 gem 'rspec-puppet'
 gem "rspec-puppet-facts"
-gem 'librarian-puppet'
 gem 'puppet-blacksmith'
+gem 'librarian-puppet'
 gem 'highline'
-
-# rspec must be v2 for ruby 1.8.7
-if RUBY_VERSION >= '1.8.7' and RUBY_VERSION < '1.9'
-  gem 'rspec', '~> 2.0'
-  gem 'rake', '~> 10.0'
-else
-  gem 'rake'
-end
+gem 'rake'
 
 if RUBY_VERSION < '2.0'
   # json 2.x requires ruby 2.0. Lock to 1.8

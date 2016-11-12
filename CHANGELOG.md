@@ -1,7 +1,9 @@
 # Change log
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased][unreleased]
+## [latest][current]
+* Fix firstrun fact for Puppet 3
+* Remove ruby1.8.7 workarounds
 
 ## [1.2.0] - 2016-11-12
 * Switch nginx module dependency from jfryman to voxpupuli (puppet-nginx)

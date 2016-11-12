@@ -42,6 +42,12 @@ define letsencrypt_nginx::vhost(
 ){
   include letsencrypt_nginx
 
+  if is_hash($::facts) {
+    $firstrun_fact = $::facts['letsencrypt_nginx_firstrun']
+  } else {
+    $firstrun_fact = $::letsencrypt_nginx_firstrun
+  }
+
   validate_array($exclude_domains)
   if $webroot_paths {
     validate_array($webroot_paths)
@@ -64,7 +70,7 @@ define letsencrypt_nginx::vhost(
     }
   }
 
-  if $letsencrypt_nginx::firstrun_standalone and $::facts['letsencrypt_nginx_firstrun'] != 'SUCCESS' {
+  if $letsencrypt_nginx::firstrun_standalone and $firstrun_fact != 'SUCCESS' {
     letsencrypt::certonly{ "${name}_firstrun_standalone":
       plugin          => 'standalone',
       domains         => $real_domains,
@@ -74,7 +80,7 @@ define letsencrypt_nginx::vhost(
       notify          => Exec['set letsencrypt_nginx_firstrun fact'];
     }
   }
-  if $letsencrypt_nginx::firstrun_webroot and $::facts['letsencrypt_nginx_firstrun'] != 'SUCCESS'{
+  if $letsencrypt_nginx::firstrun_webroot and $firstrun_fact != 'SUCCESS'{
     letsencrypt::certonly{ "${name}_firstrun_webroot":
       plugin          => 'webroot',
       domains         => $real_domains,
