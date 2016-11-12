@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/pgassmann/puppet-letsencrypt_nginx.svg?branch=master)](https://travis-ci.org/pgassmann/puppet-letsencrypt_nginx)
+
 # letsencrypt_nginx
 
 #### Table of Contents
