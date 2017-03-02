@@ -18,7 +18,7 @@ The goal of [Let's Encrypt](https://letsencrypt.org) is to automate ssl certific
 
 This module is a helper to manage letsencrypt for puppet managed nginx vhosts.
 
-Works with danzilio/letsencrypt and jfryman/nginx
+Works with puppet/letsencrypt and jfryman/nginx
 
 ## Module Description
 
@@ -36,7 +36,7 @@ This allows to solve the challenge even if the vhost is just a proxy to another 
 
 * configure locations for the letsencrypt challenge path for defined vhosts and default vhost
 * Define default vhost for nginx that catches all requests that do not match a server_name
-* Uses letsencrypt::certonly to get certificate (requires danzilio-letsencrypt)
+* Uses letsencrypt::certonly to get certificate (requires puppet-letsencrypt)
 * Tell letsencrypt::certonly to manage cron for renewals
 
 ### What letsencrypt_nginx does not
@@ -47,7 +47,7 @@ This allows to solve the challenge even if the vhost is just a proxy to another 
 
 Requests to Port 80 (and 433) of the IPv4 address of the domains to encrypt need to reach your server.
 
-This module uses the danzilio/letsencrypt module, see it's documentation for the letsencrypt options
+This module uses the puppet/letsencrypt module, see it's documentation for the letsencrypt options
 
 ### Usage
 
