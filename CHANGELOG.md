@@ -1,7 +1,8 @@
 # Change log
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [latest][current]
+## [2.0.1] - 2017-03-18
+* adapt to breaking changges in v0.6.0 puppet/nginx
 * Fix firstrun fact for Puppet 3
 * Remove ruby1.8.7 workarounds
 

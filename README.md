@@ -18,7 +18,7 @@ The goal of [Let's Encrypt](https://letsencrypt.org) is to automate ssl certific
 
 This module is a helper to manage letsencrypt for puppet managed nginx servers.
 
-Works with danzilio/letsencrypt and jfryman/nginx
+Works with [puppet/letsencrypt](https://github.com/voxpupuli/puppet-letsencrypt) and [puppet/nginx](https://github.com/voxpupuli/puppet-nginx]
 
 ## Module Description
 
@@ -36,7 +36,7 @@ This allows to solve the challenge even if the server is just a proxy to another
 
 * configure locations for the letsencrypt challenge path for defined servers and default server
 * Define default server for nginx that catches all requests that do not match a server_name
-* Uses letsencrypt::certonly to get certificate (requires danzilio-letsencrypt)
+* Uses letsencrypt::certonly to get certificate (requires puppet-letsencrypt)
 * Tell letsencrypt::certonly to manage cron for renewals
 
 ### What letsencrypt_nginx does not
@@ -47,7 +47,7 @@ This allows to solve the challenge even if the server is just a proxy to another
 
 Requests to Port 80 (and 433) of the IPv4 address of the domains to encrypt need to reach your server.
 
-This module uses the danzilio/letsencrypt module, see it's documentation for the letsencrypt options
+This module uses the puppet/letsencrypt module, see it's documentation for the letsencrypt options
 
 ### Usage
 
@@ -197,7 +197,6 @@ Configure acme-challenge location webroot for a nginx server
 * `server`: server to configure location for, defaults to $name
 
 
-
 ## Development
 
 Run `bundle exec rake` to execute the spec tests. There are already some basic tests for each class and define, but not all options are covered.
@@ -216,7 +215,6 @@ Apache 2.0
 
 ## TODO & Ideas
 
-* More Testing
 * Automatically configure SSL certificate and key on the server
 * Add Domains to existing Certificates
 * Support for RedHat, CentOS etc.

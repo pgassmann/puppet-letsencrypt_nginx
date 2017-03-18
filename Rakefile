@@ -53,6 +53,7 @@ namespace :module do
     level = :major if agree('Did you change the API so code who uses this module needs to change?')
     if agree("The selected level for the realease is '#{level.to_s}'. Do you agree?")
       new_version = metadata.send("bump_#{level}!")
+      git.exec_git("commit -am 'Bumping version to #{new_version}'")
       say("Bumping version from #{metadata.version} to #{new_version}")
     else
       say('canceling release')
