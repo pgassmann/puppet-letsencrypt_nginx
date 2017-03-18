@@ -5,12 +5,12 @@
 #
 # === Parameters
 #
-#  * `default_vhost_name`:
-#    name of nginx vhost that catches all requests that do not match any other server_name
+#  * `default_server_name`:
+#    name of nginx server that catches all requests that do not match any other server_name
 #
 #  * `webroot`:
 #    This directory is configured as webroot for the webroot authentication
-#    locations added to the vhost to allow renewals
+#    locations added to the server to allow renewals
 #
 #  * `firstrun_webroot`:
 #    Use different webroot on first run.
@@ -24,16 +24,16 @@
 #    letsencrypt will use standalone mode to get the certificate
 #    before the webserver is started the first time.
 #
-#  * `locations`, `vhosts`:
+#  * `locations`, `servers`:
 #    These Parameters can be used to create instances of these defined types through hiera
 #
 class letsencrypt_nginx (
-  $default_vhost_name  = 'default',
+  $default_server_name  = 'default',
   $webroot             = '/var/lib/letsencrypt/webroot',
   $firstrun_webroot    = undef, # For Debian & Nginx: /usr/share/nginx/html
   $firstrun_standalone = false,
   $locations           = {},
-  $vhosts              = {},
+  $servers              = {},
 ) {
   include nginx
   require ::letsencrypt
@@ -50,10 +50,10 @@ class letsencrypt_nginx (
     }
   }
 
-  # configure default nginx vhost if not defined yet
-  if $default_vhost_name == 'default' {
-    unless defined(Nginx::Resource::Vhost['default']){
-      nginx::resource::vhost{ 'default':
+  # configure default nginx server if not defined yet
+  if $default_server_name == 'default' {
+    unless defined(Nginx::Resource::Server['default']){
+      nginx::resource::server{ 'default':
         listen_options => default_server,
         server_name    => ['default'],
         www_root       => $webroot,
@@ -67,8 +67,8 @@ class letsencrypt_nginx (
   }
 
   create_resources('letsencrypt_nginx::location',  $locations)
-  create_resources('letsencrypt_nginx::vhost',     $vhosts)
+  create_resources('letsencrypt_nginx::server',     $servers)
 
-  # configure location for letsencrypt challenge path for default vhost
-  ensure_resource('letsencrypt_nginx::location', $default_vhost_name )
+  # configure location for letsencrypt challenge path for default server
+  ensure_resource('letsencrypt_nginx::location', $default_server_name )
 }

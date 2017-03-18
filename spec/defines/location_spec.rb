@@ -26,7 +26,7 @@ describe 'letsencrypt_nginx::location', :type => 'define' do
         email => 'foo@example.com',
       }
       include nginx
-      nginx::resource::vhost{'mydomain.example.com':
+      nginx::resource::server{'mydomain.example.com':
         server_name => [
                   'mydomain.example.com',
                   'www.mydomain.example.com',
@@ -36,7 +36,7 @@ describe 'letsencrypt_nginx::location', :type => 'define' do
         ipv6_enable          => true,
         ipv6_listen_options  => '',
         ssl                  => true,
-        rewrite_to_https     => true,
+        ssl_redirect     => true,
         ssl_key              => '/etc/letsencrypt/live/mydomain.example.com/privkey.pem',
         ssl_cert             => '/etc/letsencrypt/live/mydomain.example.com/fullchain.pem',
       }
@@ -45,7 +45,7 @@ describe 'letsencrypt_nginx::location', :type => 'define' do
   context "with default" do
     it { should compile.with_all_deps }
     it { should contain_nginx__resource__location('mydomain.example.com-letsencrypt').with(
-      :vhost    => 'mydomain.example.com',
+      :server    => 'mydomain.example.com',
       :location => '/.well-known/acme-challenge',
       :www_root =>  '/var/lib/letsencrypt/webroot',
       :ssl      =>  true,

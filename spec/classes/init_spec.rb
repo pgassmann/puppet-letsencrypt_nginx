@@ -51,7 +51,7 @@ describe 'letsencrypt_nginx' do
         }
         # nginx configuration
         include nginx
-        nginx::resource::vhost{'mydomain.example.com':
+        nginx::resource::server{'mydomain.example.com':
           server_name => [
                     'mydomain.example.com',
                     'www.mydomain.example.com',
@@ -61,7 +61,7 @@ describe 'letsencrypt_nginx' do
           ipv6_enable          => true,
           ipv6_listen_options  => '',
           ssl                  => true,
-          rewrite_to_https     => true,
+          ssl_redirect     => true,
           ssl_key              => '/etc/letsencrypt/live/mydomain.example.com/privkey.pem',
           ssl_cert             => '/etc/letsencrypt/live/mydomain.example.com/fullchain.pem',
         }
@@ -70,7 +70,7 @@ describe 'letsencrypt_nginx' do
     let(:params) do
       {
         :firstrun_standalone => false,
-        :vhosts => {
+        :servers => {
           'mydomain.example.com' => {},
         },
         :locations => {
@@ -80,7 +80,7 @@ describe 'letsencrypt_nginx' do
       }
     end
     it { should compile.with_all_deps }
-    it { should contain_nginx__resource__vhost('default').with(
+    it { should contain_nginx__resource__server('default').with(
       :listen_options  => 'default_server',
       :www_root        =>  '/var/lib/letsencrypt/webroot',
       :server_name     => ['default'],

@@ -1,6 +1,6 @@
 require File.expand_path(File.join(File.dirname(__FILE__),'../spec_helper'))
 
-describe 'letsencrypt_nginx::vhost', :type => 'define' do
+describe 'letsencrypt_nginx::server', :type => 'define' do
   let(:facts_default) do
     {
       :operatingsystem        => 'Ubuntu',
@@ -26,7 +26,7 @@ describe 'letsencrypt_nginx::vhost', :type => 'define' do
         email => 'foo@example.com',
       }
       include nginx
-      nginx::resource::vhost{'mydomain.example.com':
+      nginx::resource::server{'mydomain.example.com':
         server_name => [
                   'mydomain.example.com',
                   'www.mydomain.example.com',
@@ -35,7 +35,7 @@ describe 'letsencrypt_nginx::vhost', :type => 'define' do
         proxy                => 'http://10.1.2.3',
         ipv6_enable          => true,
         ipv6_listen_options  => '',
-        rewrite_to_https     => true,
+        ssl_redirect     => true,
         ssl                  => true,
         ssl_key              => '/etc/letsencrypt/live/mydomain.example.com/privkey.pem',
         ssl_cert             => '/etc/letsencrypt/live/mydomain.example.com/fullchain.pem',
@@ -44,7 +44,7 @@ describe 'letsencrypt_nginx::vhost', :type => 'define' do
   end
   context "with default" do
     it { should compile.with_all_deps }
-    it { should contain_letsencrypt_nginx__vhost('mydomain.example.com')}
+    it { should contain_letsencrypt_nginx__server('mydomain.example.com')}
     it { should contain_letsencrypt_nginx__location('mydomain.example.com')}
     it { should contain_letsencrypt__certonly('mydomain.example.com').with(
       :domains => [
@@ -63,11 +63,11 @@ describe 'letsencrypt_nginx::vhost', :type => 'define' do
         email => 'foo@example.com',
       }
       include nginx
-      nginx::resource::vhost{'mydomain.example.com':
+      nginx::resource::server{'mydomain.example.com':
         proxy                => 'http://10.1.2.3',
         ipv6_enable          => true,
         ipv6_listen_options  => '',
-        rewrite_to_https     => true,
+        ssl_redirect     => true,
         ssl                  => true,
         ssl_key              => '/etc/letsencrypt/live/mydomain.example.com/privkey.pem',
         ssl_cert             => '/etc/letsencrypt/live/mydomain.example.com/fullchain.pem',

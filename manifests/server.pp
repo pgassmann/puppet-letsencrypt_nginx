@@ -1,18 +1,18 @@
 # Let's Encrypt Nginx
-# == Define: letsencrypt_nginx::vhost
+# == Define: letsencrypt_nginx::server
 #
-# Automatically get ssl certificate for nginx vhost
+# Automatically get ssl certificate for nginx server
 #
 # === Parameters
 #
 #  * `domains`:
 #    Array of domains to get ssl certificate for.
-#    If not defined, it uses the server_name array defined in the vhost.
-#    Use these domains instead of reading server_name array of vhost.
+#    If not defined, it uses the server_name array defined in the server.
+#    Use these domains instead of reading server_name array of server.
 #
 #  * `exclude_domains`:
 #    Array of servernames that should not be added as alt names for the ssl cert.
-#    E.g. Elements of server_name that are defined in the vhost,
+#    E.g. Elements of server_name that are defined in the server,
 #    but are not public resolvable or not valid fqdns.
 #
 #  * `webroot_paths`:
@@ -32,8 +32,8 @@
 #    Boolean indicating whether or not to schedule cron job for renewal.
 #    Runs daily but only renews if near expiration, e.g. within 10 days.
 #
-define letsencrypt_nginx::vhost(
-  $vhost           = $name,
+define letsencrypt_nginx::server(
+  $server          = $name,
   $domains         = undef,
   $exclude_domains = [],
   $webroot_paths   = undef,
@@ -54,19 +54,19 @@ define letsencrypt_nginx::vhost(
     $real_webroot_paths = $webroot_paths
   } else {
     $real_webroot_paths = [$letsencrypt_nginx::webroot]
-    # if vhost is set as default_vhost, then the location is already added.
-    ensure_resource('letsencrypt_nginx::location', $vhost )
+    # if server is set as default_server, then the location is already added.
+    ensure_resource('letsencrypt_nginx::location', $server )
   }
 
   if $domains {
     validate_array($domains)
     $real_domains = delete($domains, $exclude_domains)
   } else {
-    if defined(Nginx::Resource::Vhost[$vhost]){
-      $vhost_domains = getparam(Nginx::Resource::Vhost[$vhost], 'server_name')
-      $real_domains  = delete($vhost_domains, $exclude_domains)
+    if defined(Nginx::Resource::Server[$server]){
+      $server_domains = getparam(Nginx::Resource::Server[$server], 'server_name')
+      $real_domains   = delete($server_domains, $exclude_domains)
     } else {
-      fail("no domains specified and Nginx::Resource::Vhost[${vhost}] is not yet defined, make sure that letsencrypt_nginx::vhost is parsed after nginx::resource::vhost")
+      fail("no domains specified and Nginx::Resource::Server[${server}] is not yet defined, make sure that letsencrypt_nginx::server is parsed after nginx::resource::server")
     }
   }
 

@@ -16,32 +16,32 @@
 
 The goal of [Let's Encrypt](https://letsencrypt.org) is to automate ssl certificates.
 
-This module is a helper to manage letsencrypt for puppet managed nginx vhosts.
+This module is a helper to manage letsencrypt for puppet managed nginx servers.
 
 Works with danzilio/letsencrypt and jfryman/nginx
 
 ## Module Description
 
-The goal of this module is to enable ssl on puppet managed nginx vhosts as
-simple as possible. The module reuses the domains configured in the vhost server_name
+The goal of this module is to enable ssl on puppet managed nginx servers as
+simple as possible. The module reuses the domains configured in the server server_name
 
 For the authorization, the webroot challenge is used and a custom location is
-automatically added to the ngninx vhost so that the challenge path is using
+automatically added to the ngninx server so that the challenge path is using
 the letsencrypt webroot.
-This allows to solve the challenge even if the vhost is just a proxy to another server.
+This allows to solve the challenge even if the server is just a proxy to another server.
 
 ## Setup
 
 ### What letsencrypt_nginx does
 
-* configure locations for the letsencrypt challenge path for defined vhosts and default vhost
-* Define default vhost for nginx that catches all requests that do not match a server_name
+* configure locations for the letsencrypt challenge path for defined servers and default server
+* Define default server for nginx that catches all requests that do not match a server_name
 * Uses letsencrypt::certonly to get certificate (requires danzilio-letsencrypt)
 * Tell letsencrypt::certonly to manage cron for renewals
 
 ### What letsencrypt_nginx does not
 
-* Manage nginx vhost ssl configuration. Configure the vhost ssl and certificate as seen  in the examples below.
+* Manage nginx server ssl configuration. Configure the server ssl and certificate as seen  in the examples below.
 
 ### Setup Requirements
 
@@ -51,24 +51,24 @@ This module uses the danzilio/letsencrypt module, see it's documentation for the
 
 ### Usage
 
-See the following example for encrypting a nginx vhost.
-This will successfully configure nginx, the vhost and the ssl certificat in one run, if added to a blank Server.
+See the following example for encrypting a nginx server.
+This will successfully configure nginx, the server and the ssl certificat in one run, if added to a blank Server.
 
 Important: You should declare letsencrypt_nginx resources after the nginx resources.
 The fetching of the configured domains is parse order dependent.
 
 
-#### Let's encrypt nginx vhost
+#### Let's encrypt nginx server
 
 
-    nginx::resource::vhost { 'letsencrypt-test1.example.com':
+    nginx::resource::server { 'letsencrypt-test1.example.com':
       server_name      => [
         'letsencrypt-test1.example.com',
         'letsencrypt-test2.example.com',
       ],
       proxy            => 'http://10.1.2.3',
       ssl              => true,
-      rewrite_to_https => true,
+      ssl_redirect => true,
       ssl_key          => '/etc/letsencrypt/live/letsencrypt-test1.example.com/privkey.pem',
       ssl_cert         => '/etc/letsencrypt/live/letsencrypt-test1.example.com/fullchain.pem',
     }
@@ -77,13 +77,13 @@ The fetching of the configured domains is parse order dependent.
     }
     class { 'letsencrypt_nginx':
       firstrun_webroot => '/usr/share/nginx/html',
-      vhosts           => {
+      servers           => {
         'letsencrypt-test1.example.com' => {},
       },
     }
 
 To add ssl configuration to an existing installation, you need first to configure the locations
-for your default vhost and your existing vhost.
+for your default server and your existing server.
 
     class { 'letsencrypt_nginx':
       locations => {
@@ -92,7 +92,7 @@ for your default vhost and your existing vhost.
       }
     }
 
-If this is applied successfully, you can then add the ssl configuration to your nginx vhost as above and declare your letsencrypt_nginx::vhost
+If this is applied successfully, you can then add the ssl configuration to your nginx server as above and declare your letsencrypt_nginx::server
 
 #### Hiera example
 
@@ -101,14 +101,14 @@ If this is applied successfully, you can then add the ssl configuration to your 
       - letsencrypt
       - letsencrypt_nginx
 
-    nginx::vhosts:
+    nginx::servers:
       'letsencrypt-test1.example.com':
           server_name:
                                 - 'letsencrypt-test1.example.com'
                                 - 'letsencrypt-test2.example.com'
           proxy:                'http://10.1.2.3'
           ssl:                  true
-          rewrite_to_https:     true
+          ssl_redirect:     true
           ssl_key:              '/etc/letsencrypt/live/letsencrypt-test1.example.com/privkey.pem'
           ssl_cert:             '/etc/letsencrypt/live/letsencrypt-test1.example.com/fullchain.pem'
 
@@ -118,7 +118,7 @@ If this is applied successfully, you can then add the ssl configuration to your 
       server: 'https://acme-staging.api.letsencrypt.org/directory'
 
     letsencrypt_nginx::firstrun_webroot: '/usr/share/nginx/html'
-    letsencrypt_nginx::vhosts:
+    letsencrypt_nginx::servers:
       'letsencrypt-test1.example.com': {}
 
 
@@ -131,12 +131,12 @@ Let's Encrypt base configuration and hiera interface.
 
 #### Parameters
 
-* `default_vhost_name`:
-  name of nginx vhost that catches all requests that do not match any other server_name
+* `default_server_name`:
+  name of nginx server that catches all requests that do not match any other server_name
 
 * `webroot`:
   This directory is configured as webroot for the webroot authentication
-  locations added to the vhost to allow renewals
+  locations added to the server to allow renewals
 
 * `firstrun_webroot`:
   Use different webroot on first run.
@@ -150,24 +150,24 @@ Let's Encrypt base configuration and hiera interface.
   letsencrypt will use standalone mode to get the certificate
   before the webserver is started the first time.
 
-* `locations`, `vhosts`:
+* `locations`, `servers`:
   These Parameters can be used to create instances of these defined types through hiera
 
 
-### Define: letsencrypt_nginx::vhost
+### Define: letsencrypt_nginx::server
 
-Automatically get ssl certificate for nginx vhost
+Automatically get ssl certificate for nginx server
 
 #### Parameters
 
 * `domains`:
   Array of domains to get ssl certificate for.
-  If not defined, it uses the server_name array defined in the vhost.
-  Use these domains instead of reading server_name array of vhost.
+  If not defined, it uses the server_name array defined in the server.
+  Use these domains instead of reading server_name array of server.
 
 * `exclude_domains`:
   Array of servernames that should not be added as alt names for the ssl cert.
-  E.g. Elements of server_name that are defined in the vhost,
+  E.g. Elements of server_name that are defined in the server,
   but are not public resolvable or not valid fqdns.
 
 * `webroot_paths`:
@@ -190,11 +190,11 @@ Automatically get ssl certificate for nginx vhost
 
 ### Define: letsencrypt_nginx::location
 
-Configure acme-challenge location webroot for a nginx vhost
+Configure acme-challenge location webroot for a nginx server
 
 #### Parameters
 
-* `vhost`: vhost to configure location for, defaults to $name
+* `server`: server to configure location for, defaults to $name
 
 
 
@@ -217,6 +217,6 @@ Apache 2.0
 ## TODO & Ideas
 
 * More Testing
-* Automatically configure SSL certificate and key on the vhost
+* Automatically configure SSL certificate and key on the server
 * Add Domains to existing Certificates
 * Support for RedHat, CentOS etc.
