@@ -4,7 +4,7 @@ bundler_args: --without development
 before_install: rm Gemfile.lock || true
 sudo: false
 rvm:
-  - 2.3.1
+  - 2.3.3
   - 2.0.0
   - 1.9.3
 script: bundle exec rake release_checks
@@ -18,9 +18,9 @@ env:
   - PUPPET_VERSION="~> 3.8"
 matrix:
   exclude:
-   - rvm: 2.3.1
+   - rvm: 2.3.3
      env: PUPPET_VERSION="~> 3.4.0"
-   - rvm: 2.3.1
+   - rvm: 2.3.3
      env: PUPPET_VERSION="~> 3.8"
 
    - rvm: 1.9.3
