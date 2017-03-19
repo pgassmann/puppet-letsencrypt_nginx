@@ -62,7 +62,7 @@ class letsencrypt_nginx (
   }
 
   exec{ 'set letsencrypt_nginx_firstrun fact':
-    command     => 'mkdir -p /etc/facter/facts.d/ && echo "letsencrypt_nginx_firstrun=SUCCESS" > /etc/facter/facts.d/letsencrypt_nginx.txt',
+    command     => '/bin/mkdir -p /etc/facter/facts.d/ && echo "letsencrypt_nginx_firstrun=SUCCESS" > /etc/facter/facts.d/letsencrypt_nginx.txt',
     refreshonly => true,
   }
 
