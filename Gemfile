@@ -12,7 +12,6 @@ gem 'puppet-blacksmith'
 gem 'librarian-puppet'
 gem 'highline'
 gem 'rake'
-gem 'parallel_tests'
 
 if RUBY_VERSION < '2.0'
   # json 2.x requires ruby 2.0. Lock to 1.8
@@ -20,4 +19,5 @@ if RUBY_VERSION < '2.0'
   gem 'json_pure', '~> 1.0'
 else
   gem 'json'
+  gem 'parallel_tests'
 end

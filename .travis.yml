@@ -24,11 +24,15 @@ matrix:
      env: PUPPET_VERSION="~> 3.8"
 
    - rvm: 1.9.3
-     env: PUPPET_VERSION="~> 4.7.0"
+     env: PUPPET_VERSION="~> 4"
+   - rvm: 1.9.3
+     env: PUPPET_VERSION="~> 4"     STRICT_VARIABLES="yes" FACTER_letsencrypt_nginx_firstrun=""
    - rvm: 1.9.3
      env: PUPPET_VERSION="~> 4.5.0"
 
    - rvm: 2.0.0
-     env: PUPPET_VERSION="~> 4.7.0"
+     env: PUPPET_VERSION="~> 4"
+   - rvm: 2.0.0
+     env: PUPPET_VERSION="~> 4"     STRICT_VARIABLES="yes" FACTER_letsencrypt_nginx_firstrun=""
    - rvm: 2.0.0
      env: PUPPET_VERSION="~> 4.5.0"
