@@ -3,28 +3,13 @@ language: ruby
 bundler_args: --without development
 before_install: rm Gemfile.lock || true
 sudo: false
-rvm:
-  - 2.3.3
-  - 2.0.0
 script: bundle exec rake release_checks
-env:
-  - PUPPET_VERSION="~> 4"
-  - PUPPET_VERSION="~> 4"     STRICT_VARIABLES="yes" FACTER_letsencrypt_nginx_firstrun=""
-  - PUPPET_VERSION="~> 4.7.0"
-  - PUPPET_VERSION="~> 4.5.0"
-  - PUPPET_VERSION="~> 4.0.0"
-  - PUPPET_VERSION="~> 3.4.0"
-  - PUPPET_VERSION="~> 3.8"
 matrix:
-  exclude:
-   - rvm: 2.3.3
-     env: PUPPET_VERSION="~> 3.4.0"
-   - rvm: 2.3.3
-     env: PUPPET_VERSION="~> 3.8"
-
-   - rvm: 2.0.0
-     env: PUPPET_VERSION="~> 4"
-   - rvm: 2.0.0
-     env: PUPPET_VERSION="~> 4"     STRICT_VARIABLES="yes" FACTER_letsencrypt_nginx_firstrun=""
-   - rvm: 2.0.0
-     env: PUPPET_VERSION="~> 4.5.0"
+  fast_finish: true
+  include:
+  - rvm: 2.1.9
+    env: PUPPET_VERSION="~> 4.0"
+  - rvm: 2.4.2
+    env: PUPPET_VERSION="~> 5.0" FACTER_letsencrypt_nginx_firstrun=""
+  - rvm: 2.4.2
+    env: PUPPET_VERSION="~> 5.0"
