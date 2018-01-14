@@ -4,6 +4,7 @@ require 'puppet_blacksmith/rake_tasks'
 require "highline/import"
 
 PuppetLint.configuration.send('disable_80chars')
+PuppetLint.configuration.send('disable_140chars')
 PuppetLint.configuration.ignore_paths = ["spec/**/*.pp", "pkg/**/*.pp"]
 
 def metadata
@@ -37,10 +38,14 @@ task :spec_prep do
   unless File.exists?("#{pwd}/spec/fixtures/modules/#{metadata.name}")
     sh("ln -s #{pwd} #{pwd}/spec/fixtures/modules/#{metadata.name}")
   end
+  # allow task to be invoked multiple times
+  Rake::Task[:spec_prep].reenable
 end
 
 task :spec_clean do
   sh('rm -rf spec/fixtures/modules/*')
+  # allow task to be invoked multiple times
+  Rake::Task[:spec_clean].reenable
 end
 
 namespace :module do
@@ -53,7 +58,7 @@ namespace :module do
     level = :major if agree('Did you change the API so code who uses this module needs to change?')
     if agree("The selected level for the realease is '#{level.to_s}'. Do you agree?")
       new_version = metadata.send("bump_#{level}!")
-      git.exec_git("commit -am 'Bumping version to #{new_version}'")
+      git.commit_modulefile!(new_version)
       say("Bumping version from #{metadata.version} to #{new_version}")
     else
       say('canceling release')
@@ -64,8 +69,8 @@ namespace :module do
   desc 'clear the tag'
   task :clear_tag do
     metadata_reload
-    git.exec_git("tag --delete v#{metadata.version}")
-    git.exec_git("push origin :refs/tags/v#{metadata.version}")
+    sh("git tag --delete v#{metadata.version}")
+    sh("git push origin :refs/tags/v#{metadata.version}")
     say("removing git tag v#{metadata.version}")
   end
 
@@ -77,6 +82,11 @@ namespace :module do
     git.tag_pattern = "v%s"
     git.tag!(metadata.version)
     say("taging git revision with v#{metadata.version}")
+  end
+
+  desc 'push the new release and trigger the build'
+  task :push do
+    git.push!
   end
 end
 
