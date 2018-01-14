@@ -13,6 +13,7 @@ describe 'letsencrypt_nginx::location', :type => 'define' do
       :path                   => '/usr/bin',
       :puppetversion          => Puppet.version,
       :concat_basedir         => '/var/lib/puppet/concat',
+      :puppet_vardir          => '/var/lib/puppet',
     }
   end
   let(:facts) do
@@ -25,7 +26,10 @@ describe 'letsencrypt_nginx::location', :type => 'define' do
       class { ::letsencrypt:
         email => 'foo@example.com',
       }
-      include nginx
+      # nginx configuration
+      class{'nginx':
+        manage_repo => false;
+      }
       nginx::resource::server{'mydomain.example.com':
         server_name => [
                   'mydomain.example.com',

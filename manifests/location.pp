@@ -26,7 +26,7 @@ define letsencrypt_nginx::location(
     } else {
       $real_server_ssl = $server_ssl
     }
-    validate_bool($real_server_ssl)
+    validate_legacy(Boolean, 'validate_bool', $real_server_ssl)
     nginx::resource::location{"${server}-letsencrypt":
       server     => $server,
       location   => '/.well-known/acme-challenge',

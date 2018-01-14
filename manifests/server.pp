@@ -50,7 +50,7 @@ define letsencrypt_nginx::server(
 
   validate_array($exclude_domains)
   if $webroot_paths {
-    validate_array($webroot_paths)
+    validate_legacy(Array, 'validate_array', $webroot_paths)
     $real_webroot_paths = $webroot_paths
   } else {
     $real_webroot_paths = [$letsencrypt_nginx::webroot]

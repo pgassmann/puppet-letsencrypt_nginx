@@ -12,6 +12,7 @@ describe 'letsencrypt_nginx' do
       :path                   => '/usr/bin',
       :puppetversion          => Puppet.version,
       :concat_basedir         => '/var/lib/puppet/concat',
+      :puppet_vardir          => '/var/lib/puppet',
     }
   end
   let(:facts) do
@@ -25,6 +26,10 @@ describe 'letsencrypt_nginx' do
       "
         # Exec resource  default
         Exec{ path => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin' }
+        # nginx configuration
+        class{'nginx':
+          manage_repo => false;
+        }
         # letsencrypt minimal params
         class { ::letsencrypt:
           email => 'foo@example.com',
@@ -50,7 +55,9 @@ describe 'letsencrypt_nginx' do
           email => 'foo@example.com',
         }
         # nginx configuration
-        include nginx
+        class{'nginx':
+          manage_repo => false;
+        }
         nginx::resource::server{'mydomain.example.com':
           server_name => [
                     'mydomain.example.com',
@@ -80,6 +87,8 @@ describe 'letsencrypt_nginx' do
       }
     end
     it { should compile.with_all_deps }
+    it { should contain_letsencrypt_nginx__server('mydomain.example.com')}
+    it { should contain_letsencrypt_nginx__location('mydomain.example.com')}
     it { should contain_nginx__resource__server('default').with(
       :listen_options  => 'default_server',
       :www_root        =>  '/var/lib/letsencrypt/webroot',

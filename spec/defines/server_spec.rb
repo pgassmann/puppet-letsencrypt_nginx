@@ -13,6 +13,7 @@ describe 'letsencrypt_nginx::server', :type => 'define' do
       :path                   => '/usr/bin',
       :puppetversion          => Puppet.version,
       :concat_basedir         => '/var/lib/puppet/concat',
+      :puppet_vardir          => '/var/lib/puppet',
     }
   end
   let(:facts) do
@@ -25,7 +26,10 @@ describe 'letsencrypt_nginx::server', :type => 'define' do
       class { ::letsencrypt:
         email => 'foo@example.com',
       }
-      include nginx
+      # nginx configuration
+      class{'nginx':
+        manage_repo => false;
+      }
       nginx::resource::server{'mydomain.example.com':
         server_name => [
                   'mydomain.example.com',
@@ -62,7 +66,10 @@ describe 'letsencrypt_nginx::server', :type => 'define' do
       class { ::letsencrypt:
         email => 'foo@example.com',
       }
-      include nginx
+      # nginx configuration
+      class{'nginx':
+        manage_repo => false;
+      }
       nginx::resource::server{'mydomain.example.com':
         proxy                => 'http://10.1.2.3',
         ipv6_enable          => true,
@@ -75,6 +82,7 @@ describe 'letsencrypt_nginx::server', :type => 'define' do
     "
   end
     it { should compile.with_all_deps }
+    it { should contain_letsencrypt_nginx__server('mydomain.example.com')}
     it { should contain_letsencrypt_nginx__location('mydomain.example.com')}
     it { should contain_letsencrypt__certonly('mydomain.example.com').with(
       :domains => ['mydomain.example.com'],
@@ -88,6 +96,10 @@ describe 'letsencrypt_nginx::server', :type => 'define' do
         Exec{ path => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin' }
         class { ::letsencrypt:
           email => 'foo@example.com',
+        }
+        # nginx configuration
+        class{'nginx':
+          manage_repo => false;
         }
         class{ 'letsencrypt_nginx':
           firstrun_standalone => true,
@@ -104,7 +116,6 @@ describe 'letsencrypt_nginx::server', :type => 'define' do
     it { should contain_nginx__resource__location('foo.com-letsencrypt')}
     it { should contain_letsencrypt__certonly('foo.com_firstrun_standalone').with(
       :domains => [ 'd1.foo.com', 'd2.bar.com'],
-      :notify  => 'Service[nginx]',
       :plugin  => 'standalone',
       :manage_cron    => false,
       :notify  => 'Exec[set letsencrypt_nginx_firstrun fact]',
@@ -122,6 +133,10 @@ describe 'letsencrypt_nginx::server', :type => 'define' do
         Exec{ path => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin' }
         class { ::letsencrypt:
           email => 'foo@example.com',
+        }
+        # nginx configuration
+        class{'nginx':
+          manage_repo => false;
         }
         class{ 'letsencrypt_nginx':
           firstrun_standalone => true,
@@ -141,7 +156,6 @@ describe 'letsencrypt_nginx::server', :type => 'define' do
     it { should compile.with_all_deps }
     it { should_not contain_letsencrypt__certonly('foo.com_firstrun_standalone').with(
       :domains => [ 'd1.foo.com', 'd2.bar.com'],
-      :notify  => 'Service[nginx]',
       :plugin  => 'standalone',
       :manage_cron    => false,
       :notify  => 'Exec[set letsencrypt_nginx_firstrun fact]',
@@ -158,6 +172,10 @@ describe 'letsencrypt_nginx::server', :type => 'define' do
         Exec{ path => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin' }
         class { ::letsencrypt:
           email => 'foo@example.com',
+        }
+        # nginx configuration
+        class{'nginx':
+          manage_repo => false;
         }
         class{ 'letsencrypt_nginx':
           firstrun_webroot => '/usr/share/nginx/html',
@@ -190,6 +208,10 @@ describe 'letsencrypt_nginx::server', :type => 'define' do
         Exec{ path => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin' }
         class { ::letsencrypt:
           email => 'foo@example.com',
+        }
+        # nginx configuration
+        class{'nginx':
+          manage_repo => false;
         }
         class{ 'letsencrypt_nginx':
           firstrun_webroot => '/usr/share/nginx/html',
