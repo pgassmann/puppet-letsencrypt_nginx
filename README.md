@@ -18,7 +18,7 @@ The goal of [Let's Encrypt](https://letsencrypt.org) is to automate ssl certific
 
 This module is a helper to manage letsencrypt for puppet managed nginx servers.
 
-Works with [puppet/letsencrypt](https://github.com/voxpupuli/puppet-letsencrypt) and [puppet/nginx](https://github.com/voxpupuli/puppet-nginx]
+Works with [puppet/letsencrypt](https://github.com/voxpupuli/puppet-letsencrypt) and [puppet/nginx](https://github.com/voxpupuli/puppet-nginx)
 
 ## Module Description
 
