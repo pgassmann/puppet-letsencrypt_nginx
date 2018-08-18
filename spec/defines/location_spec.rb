@@ -5,10 +5,32 @@ describe 'letsencrypt_nginx::location', :type => 'define' do
     {
       :operatingsystem        => 'Ubuntu',
       :osfamily               => 'Debian',
-      :operatingsystemrelease => '14.04',
-      :lsbdistcodename        => 'trusty',
+      :os                     => {
+        'architecture' => "amd64",
+        'distro' => {
+          'codename' => "xenial",
+          'description' => "Ubuntu 16.04.5 LTS",
+          'id' => "Ubuntu",
+          'release' => {
+            'full' => "16.04",
+            'major' => "16.04"
+          }
+        },
+        'family' => "Debian",
+        'hardware' => "x86_64",
+        'name' => "Ubuntu",
+        'release' => {
+          'full' => "16.04",
+          'major' => "16.04"
+        },
+        'selinux' => {
+          'enabled' => false
+        }
+      },
+      :operatingsystemrelease => '16.04',
+      :lsbdistcodename        => 'xenial',
       :lsbdistid              => 'Ubuntu',
-      :lsbdistrelease         => '14.04',
+      :lsbdistrelease         => '16.04',
       :ipaddress6             => '::1',
       :path                   => '/usr/bin',
       :puppetversion          => Puppet.version,
