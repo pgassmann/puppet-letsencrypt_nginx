@@ -29,11 +29,12 @@
 #
 class letsencrypt_nginx (
   $default_server_name  = 'default',
-  $webroot             = '/var/lib/letsencrypt/webroot',
-  $firstrun_webroot    = undef, # For Debian & Nginx: /usr/share/nginx/html
-  $firstrun_standalone = false,
-  $locations           = {},
+  $webroot              = '/var/lib/letsencrypt/webroot',
+  $firstrun_webroot     = undef, # For Debian & Nginx: /usr/share/nginx/html
+  $firstrun_standalone  = false,
+  $locations            = {},
   $servers              = {},
+  $cron_success_command = '/bin/systemctl reload nginx.service',
 ) {
   include nginx
   require ::letsencrypt

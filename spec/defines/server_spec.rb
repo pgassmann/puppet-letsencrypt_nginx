@@ -147,6 +147,7 @@ describe 'letsencrypt_nginx::server', :type => 'define' do
       :notify  => 'Service[nginx]',
       :manage_cron    => true,
       :plugin  => 'webroot',
+      :cron_success_command => '/bin/systemctl reload nginx.service',
     )}
   end
   context "with firstrun_standalone mode success" do
@@ -186,6 +187,7 @@ describe 'letsencrypt_nginx::server', :type => 'define' do
       :domains => [ 'd1.foo.com', 'd2.bar.com'],
       :notify  => 'Service[nginx]',
       :plugin  => 'webroot',
+      :cron_success_command => '/bin/systemctl reload nginx.service',
     )}
   end
   context "with firstrun_webroot " do
@@ -222,6 +224,7 @@ describe 'letsencrypt_nginx::server', :type => 'define' do
       :notify  => 'Service[nginx]',
       :manage_cron    => true,
       :plugin         => 'webroot',
+      :cron_success_command => '/bin/systemctl reload nginx.service',
     )}
   end
   context "with firstrun_webroot success" do
@@ -263,6 +266,7 @@ describe 'letsencrypt_nginx::server', :type => 'define' do
       :notify  => 'Service[nginx]',
       :manage_cron    => true,
       :plugin         => 'webroot',
+      :cron_success_command => '/bin/systemctl reload nginx.service',
     )}
   end
 

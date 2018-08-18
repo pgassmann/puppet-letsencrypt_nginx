@@ -33,14 +33,21 @@
 #    Runs daily but only renews if near expiration, e.g. within 10 days.
 #
 define letsencrypt_nginx::server(
-  $server          = $name,
-  $domains         = undef,
-  $exclude_domains = [],
-  $webroot_paths   = undef,
-  $additional_args = undef,
-  $manage_cron     = true,
+  $server               = $name,
+  $domains              = undef,
+  $exclude_domains      = [],
+  $webroot_paths        = undef,
+  $additional_args      = undef,
+  $manage_cron          = true,
+  $cron_success_command = undef
 ){
   include letsencrypt_nginx
+
+  if $cron_success_command {
+    $real_cron_success_command = $cron_success_command
+  } else {
+    $real_cron_success_command = $letsencrypt_nginx::cron_success_command
+  }
 
   if is_hash($::facts) {
     $firstrun_fact = $::facts['letsencrypt_nginx_firstrun']
@@ -94,11 +101,12 @@ define letsencrypt_nginx::server(
   # Always define letsencrypt::certonly with webroot for cronjob,
   # exec will not be executed again, if certificate exists
   letsencrypt::certonly{ $name:
-    plugin          => 'webroot',
-    domains         => $real_domains,
-    webroot_paths   => $real_webroot_paths,
-    additional_args => $additional_args,
-    manage_cron     => $manage_cron,
-    notify          => Service['nginx'];
+    plugin               => 'webroot',
+    domains              => $real_domains,
+    webroot_paths        => $real_webroot_paths,
+    additional_args      => $additional_args,
+    manage_cron          => $manage_cron,
+    cron_success_command => $real_cron_success_command,
+    notify               => Service['nginx'];
   }
 }
