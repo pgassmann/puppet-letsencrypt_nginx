@@ -94,11 +94,12 @@ define letsencrypt_nginx::server(
   # Always define letsencrypt::certonly with webroot for cronjob,
   # exec will not be executed again, if certificate exists
   letsencrypt::certonly{ $name:
-    plugin          => 'webroot',
-    domains         => $real_domains,
-    webroot_paths   => $real_webroot_paths,
-    additional_args => $additional_args,
-    manage_cron     => $manage_cron,
-    notify          => Service['nginx'];
+    plugin               => 'webroot',
+    domains              => $real_domains,
+    webroot_paths        => $real_webroot_paths,
+    additional_args      => $additional_args,
+    manage_cron          => $manage_cron,
+    notify               => Service['nginx'],
+    cron_success_command => '/bin/systemctl reload nginx.service';
   }
 }
