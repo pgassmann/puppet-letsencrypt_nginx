@@ -16,7 +16,7 @@
 #    Use different webroot on first run.
 #    Set this to the default webroot of the webserver if the service
 #    starts automatically when installed.
-#    E.g. For Nginx on Ubuntu: /usr/share/nginx/html
+#    E.g. For Nginx on Ubuntu: /var/www/html
 #
 #  * `firstrun_standalone`:
 #    Use standalone mode on first run.
@@ -30,7 +30,7 @@
 class letsencrypt_nginx (
   $default_server_name  = 'default',
   $webroot              = '/var/lib/letsencrypt/webroot',
-  $firstrun_webroot     = undef, # For Debian & Nginx: /usr/share/nginx/html
+  $firstrun_webroot     = undef, # For Debian & Nginx: /var/www/html
   $firstrun_standalone  = false,
   $locations            = {},
   $servers              = {},

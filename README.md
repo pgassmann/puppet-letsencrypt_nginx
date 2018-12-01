@@ -76,7 +76,7 @@ The fetching of the configured domains is parse order dependent.
       email => 'foo@example.com',
     }
     class { 'letsencrypt_nginx':
-      firstrun_webroot => '/usr/share/nginx/html',
+      firstrun_webroot => '/var/www/html',
       servers           => {
         'letsencrypt-test1.example.com' => {},
       },
@@ -117,7 +117,7 @@ If this is applied successfully, you can then add the ssl configuration to your 
     letsencrypt::config:
       server: 'https://acme-staging.api.letsencrypt.org/directory'
 
-    letsencrypt_nginx::firstrun_webroot: '/usr/share/nginx/html'
+    letsencrypt_nginx::firstrun_webroot: '/var/www/html'
     letsencrypt_nginx::servers:
       'letsencrypt-test1.example.com': {}
 
@@ -142,7 +142,7 @@ Let's Encrypt base configuration and hiera interface.
   Use different webroot on first run.
   Set this to the default webroot of the webserver if the service
   starts automatically when installed.
-  E.g. For Nginx on Ubuntu: /usr/share/nginx/html
+  E.g. For Nginx on Ubuntu: /var/www/html
 
 * `firstrun_standalone`:
   Use standalone mode on first run.

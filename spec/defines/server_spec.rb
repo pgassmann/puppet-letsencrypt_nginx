@@ -202,7 +202,7 @@ describe 'letsencrypt_nginx::server', :type => 'define' do
           manage_repo => false;
         }
         class{ 'letsencrypt_nginx':
-          firstrun_webroot => '/usr/share/nginx/html',
+          firstrun_webroot => '/var/www/html',
         }
       "
     end
@@ -216,7 +216,7 @@ describe 'letsencrypt_nginx::server', :type => 'define' do
       :domains => [ 'd1.foo.com', 'd2.bar.com'],
       :plugin  => 'webroot',
       :manage_cron    => false,
-      :webroot_paths  => ['/usr/share/nginx/html'],
+      :webroot_paths  => ['/var/www/html'],
       :notify  => 'Exec[set letsencrypt_nginx_firstrun fact]',
     )}
     it { should contain_letsencrypt__certonly('foo.com').with(
@@ -239,7 +239,7 @@ describe 'letsencrypt_nginx::server', :type => 'define' do
           manage_repo => false;
         }
         class{ 'letsencrypt_nginx':
-          firstrun_webroot => '/usr/share/nginx/html',
+          firstrun_webroot => '/var/www/html',
         }
       "
     end
@@ -258,7 +258,7 @@ describe 'letsencrypt_nginx::server', :type => 'define' do
       :domains => [ 'd1.foo.com', 'd2.bar.com'],
       :plugin  => 'webroot',
       :manage_cron    => false,
-      :webroot_paths  => ['/usr/share/nginx/html'],
+      :webroot_paths  => ['/var/www/html'],
       :notify  => 'Exec[set letsencrypt_nginx_firstrun fact]',
     )}
     it { should contain_letsencrypt__certonly('foo.com').with(
