@@ -71,5 +71,7 @@ class letsencrypt_nginx (
   create_resources('letsencrypt_nginx::server',     $servers)
 
   # configure location for letsencrypt challenge path for default server
-  ensure_resource('letsencrypt_nginx::location', $default_server_name )
+  if $default_server_name != false {
+    ensure_resource('letsencrypt_nginx::location', $default_server_name)
+  }
 }
